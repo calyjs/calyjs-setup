@@ -1,69 +1,61 @@
-# Pull Request Template
+# Pull Request
 
-Thank you for your contribution! Please review the checklist and fill in the required sections to ensure a smooth review process.
+> [!TIP]  
+> Please review the checklist and fill in the required sections to ensure a smooth review process.
 
----
+## Summary
 
-## Description
-
-Clearly describe the purpose of this pull request. What issue does it address or what enhancement does it introduce?
-
-> _Example: Implements user authentication using JWT to secure private routes._
+> [!NOTE]  
+> Provide a short summary explaining **what** this PR changes and **why**.
 
 ---
 
 ## Type of Change
 
-Indicate the nature of your change by selecting the appropriate category:
+> [!NOTE]  
+> Please delete options that are not relevant and mark the chosen one with an `x`.
 
-- [ ] ✨ Feature (`feature/*`) — New functionality
-- [ ] 🐛 Fix (`fix/*`) — Bug fix or hotfix
-- [ ] 🛠 Refactor (`refactor/*`) — Code improvement without behavior change
-- [ ] 🎨 Style (`style/*`) — Code style updates (formatting, spacing, etc.)
-- [ ] 📚 Documentation (`docs/*`) — Documentation-only changes
-- [ ] 🔁 Revert (`revert/*`) — Reverts a previous commit
-- [ ] ⚙️ CI/CD (`ci/*`) — Configuration for build or deployment pipelines
-- [ ] 🧹 Chore (`chore/*`) — Maintenance tasks
+- [ ] 🐛 Bug fix (fixes an issue)
+- [ ] ✨ New feature (adds functionality)
+- [ ] 🔧 Refactor (code improvements without behavior change)
+- [ ] 🧪 Tests (adding or updating tests)
+- [ ] 📚 Documentation (only changes to docs)
+- [ ] 🎨 Style (formatting, whitespace, etc.)
+- [ ] 🚀 CI/CD (changes to workflows or deployment)
+- [ ] 🗑 Revert (reverting previous commits)
 
 ---
 
 ## Checklist
 
-Please ensure the following items are completed before requesting a review:
+> [!IMPORTANT]  
+> Please ensure the following items are completed before requesting a review.
 
 - [ ] My branch name follows the format: `<type>/<short-description>`
-- [ ] The pull request targets the `develop` branch
 - [ ] My changes follow the [project coding style](../CONTRIBUTING.md) and guidelines of the project
-- [ ] I have written clear and descriptive commit messages using the [Conventional Commits](https://www.conventionalcommits.org) standard
-- [ ] All new and existing tests pass locally
-- [ ] I have added or updated relevant documentation as needed
-- [ ] I understand that once merged to `develop`, a follow-up PR must target `master`
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] I have added necessary documentation (if appropriate)
+- [ ] I’ve checked that no sensitive data is committed (keys, tokens, etc.)
+- [ ] I have manually tested this change in the intended environment
+- [ ] This PR targets the correct base branch (`develop` or `master`)
 
 ---
 
-## Testing
+## Related Issues
 
-Provide a brief summary of tests performed to verify the changes.
-
-> _Example: Verified token validation logic with valid and expired tokens using Postman. All tests passed._
-
----
-
-## Additional Notes (Optional)
-
-Add any extra context, considerations, or related discussions here.
-
-> _Example: This PR introduces changes to the login API and may impact the mobile app._
+> [!NOTE]  
+> Example: Closes #123, Fixes #45
 
 ---
 
-## Related Issues or Tickets
+## Screenshots or Videos (if applicable)
 
-Link any related issues or tickets:
-
-> _Closes #123_  
-> _Related to ticket: TCK-456_
+> [!NOTE]  
+> Add screenshots or gifs to demonstrate UI/UX changes.
 
 ---
 
-Thank you for your time and contribution!
+## Notes for Reviewers
+
+> [!NOTE]  
+> Include any additional context, links, or special considerations for the reviewers.
