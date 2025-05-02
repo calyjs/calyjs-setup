@@ -1,0 +1,22 @@
+{
+  /* Visit https://aka.ms/tsconfig to read more about this file */
+  "compilerOptions": {
+    "composite": true, // Required for project references
+    "target": "ES2020", // ES6 is outdated; ES2020 is safer and modern
+    "lib": ["DOM", "ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {/* TODO */},
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "noEmitOnError": true,
+    "declaration": true,
+    "emitDeclarationOnly": true
+    
+  },
+  "exclude": ["node_modules", "dist"]
+}
