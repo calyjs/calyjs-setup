@@ -1,0 +1,15 @@
+{
+  "name": "@calyjs-setup/source",
+  "version": "1.0.0",
+  "description": "CalyJS setup monorepo",
+  "packageManager": "pnpm@10.10.0",
+  "engines": {
+    "node": ">=22.15.0",
+    "pnpm": ">=10.10.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "private": true
+}
