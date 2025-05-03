@@ -1,18 +1,15 @@
 # Pull Request
 
-> [!TIP]  
 > Please review the checklist and fill in the required sections to ensure a smooth review process.
 
 ## Summary
 
-> [!NOTE]  
 > Provide a short summary explaining **what** this PR changes and **why**.
 
 ---
 
 ## Type of Change
 
-> [!NOTE]  
 > Please delete options that are not relevant and mark the chosen one with an `x`.
 
 - [ ] 🐛 Bug fix (fixes an issue)
@@ -43,19 +40,16 @@
 
 ## Related Issues
 
-> [!NOTE]  
 > Example: Closes #123, Fixes #45
 
 ---
 
 ## Screenshots or Videos (if applicable)
 
-> [!NOTE]  
 > Add screenshots or gifs to demonstrate UI/UX changes.
 
 ---
 
 ## Notes for Reviewers
 
-> [!NOTE]  
 > Include any additional context, links, or special considerations for the reviewers.
