@@ -20,7 +20,7 @@
 			"options": {
 				"cwd": "packages/utils",
 				"commands": [
-					"build-api",
+					"build-api --tsc tsconfig.lib.json",
 					"rollup --config"
 				],
 				"parallel": false
@@ -44,7 +44,8 @@
 			},
 			"inputs": ["default"],
   		"outputs": [
-				"{projectRoot}/test-results"
+				"{projectRoot}/test-results",
+				"{projectRoot}/coverage"
 			],
 			"cache": true
 		},
