@@ -1,0 +1,12 @@
+{
+  "extends": "@calyjs-setup/shared/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["jest"],
+    "noEmit": true
+  },
+  "include": [
+    "test/",
+    "src/**/__tests__/*.spec.ts",
+    "src/**/__tests__/*.test.ts"
+  ]
+}

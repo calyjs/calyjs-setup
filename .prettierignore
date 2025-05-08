@@ -1,0 +1,35 @@
+# Dependency folders
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+**/dist/
+out-tsc/
+**/out-tsc/
+
+# Coverage and test artifacts
+coverage/
+**/coverage/
+test-results/
+**/test-results/
+
+# Compiled assets
+*.log
+*.tsbuildinfo
+
+# API Extractor or TypeDoc outputs
+temp/
+**/temp/
+docs/
+**/docs/
+
+# Misc
+*.min.js
+*.bundle.js
+*.d.ts
+*.map
+
+# Changelogs or markdown files
+CHANGELOG.md
+**/*.md

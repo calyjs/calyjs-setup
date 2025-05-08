@@ -1,0 +1,72 @@
+{
+	"name": "@calyjs-setup/core",
+	"description": "Core JavaScript library to create flexible, easy-to-integrate date-time components.",
+	"packageManager": "pnpm@10.10.0",
+	"version": "0.0.0",
+	"sideEffects": false,
+	"publishConfig": {
+		"access": "public"
+	},
+	"engines": {
+		"node": ">=22.15.0",
+		"pnpm": ">=10.10.0"
+	},
+	"main": "./dist/calyjs-setup.core.umd.js",
+	"module": "./dist/calyjs-setup.core.esm.js",
+	"unpkg": "./dist/calyjs-setup.core.umd.min.js",
+	"types": "./dist/calyjs-setup.core.d.ts",
+	"exports": {
+		"./package.json": "./package.json",
+		".": {
+			"import": {
+				"types": "./dist/calyjs-setup.core.d.mts",
+				"default": "./dist/calyjs-setup.core.mjs"
+			},
+			"types": "./dist/calyjs-setup.core.d.ts",
+			"module": "./dist/calyjs-setup.core.esm.js",
+			"default": "./dist/calyjs-setup.core.umd.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"clean": "nx run @calyjs-setup/core:clean",
+		"build": "nx run @calyjs-setup/core:build --verbose",
+		"test": "nx run @calyjs-setup/core:test --verbose",
+		"lint": "nx run @calyjs-setup/core:lint --verbose",
+		"prepack": "nx run @calyjs-setup/core:prepack --verbose"
+	},
+	"dependencies": {
+		"@calyjs-setup/utils": "workspace:*"
+	},
+	"devDependencies": {
+		"@calyjs-setup/shared": "workspace:*"
+	},
+	"keywords": [
+		"calyjs-setup",
+		"calendar",
+		"clock",
+		"javascript",
+		"typescript",
+		"date",
+		"time",
+		"datetime"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+ssh://git@github.com/calyjs/calyjs-setup.git",
+		"directory": "packages/core"
+	},
+	"bugs": {
+		"url": "https://github.com/calyjs/calyjs-setup/issues"
+	},
+	"homepage": "https://github.com/calyjs/calyjs-setup/packages/core#readme",
+	"author": {
+		"email": "ruben.omh@proton.me",
+		"name": "rocmaz"
+	},
+	"license": "MIT",
+	"private": false
+}

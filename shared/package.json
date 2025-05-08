@@ -1,0 +1,36 @@
+{
+  "name": "@calyjs-setup/shared",
+  "description": "",
+  "packageManager": "pnpm@10.10.0",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.15.0",
+    "pnpm": ">=10.10.0"
+  },
+  "main": "dist/src/index.mjs",
+  "module": "dist/src/index.mjs",
+  "types": "dist/src/index.d.mts",
+  "files": [
+    "dist",
+    "babel.base.mjs",
+    "tsconfig.base.json",
+    "api-extractor.base.json"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rimraf dist",
+    "preinstall": "pnpm run clean",
+    "postinstall": "pnpm run build"
+  },
+  "bin": {
+    "build-api": "./scripts/build-api.mjs",
+    "fetch-exports": "./scripts/fetch-exports.mjs"
+  },
+  "author": {
+    "email": "ruben.omh@proton.me",
+    "name": "rocmaz"
+  },
+  "license": "MIT",
+  "private": true
+}

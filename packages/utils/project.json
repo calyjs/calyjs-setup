@@ -1,0 +1,76 @@
+{
+	"name": "@calyjs-setup/utils",
+	"root": "packages/utils",
+	"sourceRoot": "packages/utils/src",
+	"projectType": "library",
+	"targets": {
+		"clean": {
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/utils",
+				"commands": [
+					"rimraf dist out-tsc coverage test-results"
+				],
+				"parallel": false
+			}
+		},
+		"build": {
+			"dependsOn": ["clean", "^build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/utils",
+				"commands": [
+					"build-api",
+					"rollup --config"
+				],
+				"parallel": false
+			},
+			"inputs": ["production"],
+  		"outputs": [
+				"{projectRoot}/dist",
+				"{projectRoot}/out-tsc"
+			],
+			"cache": true
+		},
+		"test": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/utils",
+				"commands": [
+					"jest --coverage"
+				],
+				"parallel": false
+			},
+			"inputs": ["default"],
+  		"outputs": [
+				"{projectRoot}/test-results"
+			],
+			"cache": true
+		},
+		"lint": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/utils",
+				"commands": [
+					"eslint --fix"
+				],
+				"parallel": false
+			},
+			"inputs": ["default"],
+			"cache": true
+		},
+		"prepack": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/utils",
+				"commands": [
+					"fetch-exports"
+				],
+				"parallel": false
+			}
+		}
+	}
+}
