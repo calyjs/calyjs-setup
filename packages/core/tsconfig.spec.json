@@ -1,9 +1,10 @@
 {
   "extends": "@calyjs-setup/shared/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "out-tsc",
+    "composite": false,
     "types": ["jest"],
-    "noEmit": true
+    "noEmit": true,
+    "incremental": false
   },
   "include": [
     "test/",
