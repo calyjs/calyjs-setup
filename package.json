@@ -11,7 +11,6 @@
     "build": "nx run-many --target build",
     "test": "nx run-many --target test",
     "lint": "nx run-many --target lint",
-    "lint-staged": "lint-staged",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -46,11 +45,11 @@
     "zx": "^8.5.3"
   },
   "lint-staged": {
-    "packages/**/*.{js,jsx,ts,tsx,mjs,mts}": [
+    "packages/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "shared/**/*.{js,jsx,ts,tsx,mjs,mts}": [
+    "shared/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
       "eslint --fix",
       "prettier --write"
     ]
