@@ -1,8 +1,9 @@
 import globals from 'globals';
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import { defineConfig } from 'eslint/config';
 
-export default [
+export default defineConfig([
   {
     // Shared global settings
     languageOptions: {
@@ -18,7 +19,7 @@ export default [
     ...js.configs.recommended,
     files: ['**/*.js', '**/*.jsx'],
     rules: {
-      "no-unused-vars": "error",
+      'no-unused-vars': 'error',
     }
   },
   {
@@ -31,7 +32,7 @@ export default [
       parser: tseslint.parser
     },
     rules: {
-      "no-unused-vars": "off",
+      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',
@@ -52,4 +53,4 @@ export default [
       '**/*.md'
     ]
   }
-];
+]);
