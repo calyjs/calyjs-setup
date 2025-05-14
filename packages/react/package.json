@@ -1,0 +1,77 @@
+{
+  "name": "@calyjs-setup/react",
+  "description": "React library.",
+  "packageManager": "pnpm@10.10.0",
+  "version": "0.0.0",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22.15.0",
+    "pnpm": ">=10.10.0"
+  },
+  "main": "./dist/calyjs-setup.react.umd.js",
+  "module": "./dist/calyjs-setup.react.esm.js",
+  "unpkg": "./dist/calyjs-setup.react.umd.min.js",
+  "types": "./dist/calyjs-setup.react.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/calyjs-setup.react.d.mts",
+        "default": "./dist/calyjs-setup.react.mjs"
+      },
+      "types": "./dist/calyjs-setup.react.d.ts",
+      "module": "./dist/calyjs-setup.react.esm.js",
+      "default": "./dist/calyjs-setup.react.umd.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "clean": "nx run @calyjs-setup/react:clean",
+    "build": "nx run @calyjs-setup/react:build --verbose",
+    "test": "nx run @calyjs-setup/react:test --verbose",
+    "lint": "nx run @calyjs-setup/react:lint --verbose",
+    "prepack": "nx run @calyjs-setup/react:prepack --verbose"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.27.1",
+    "@calyjs-setup/shared": "workspace:*",
+    "@testing-library/react": "^16.3.0",
+    "@types/react": "^19.1.4",
+    "@types/react-dom": "^19.1.5"
+  },
+  "keywords": [
+    "calyjs-setup",
+    "calendar",
+    "clock",
+    "javascript",
+    "typescript",
+    "date",
+    "time",
+    "datetime"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/calyjs/calyjs-setup.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/calyjs/calyjs-setup/issues"
+  },
+  "homepage": "https://github.com/calyjs/calyjs-setup/packages/react#readme",
+  "author": {
+    "email": "ruben.omh@proton.me",
+    "name": "rocmaz"
+  },
+  "license": "MIT",
+  "private": false
+}

@@ -1,0 +1,77 @@
+{
+	"name": "@calyjs-setup/react",
+	"root": "packages/react",
+	"sourceRoot": "packages/react/src",
+	"projectType": "library",
+	"targets": {
+		"clean": {
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"rimraf dist out-tsc coverage test-results"
+				],
+				"parallel": false
+			}
+		},
+		"build": {
+			"dependsOn": ["clean", "^build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"build-api --tsc tsconfig.lib.json",
+					"rollup --config"
+				],
+				"parallel": false
+			},
+			"inputs": ["production"],
+  		"outputs": [
+				"{projectRoot}/dist",
+				"{projectRoot}/out-tsc"
+			],
+			"cache": true
+		},
+		"test": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"jest --coverage"
+				],
+				"parallel": false
+			},
+			"inputs": ["default"],
+  		"outputs": [
+				"{projectRoot}/test-results",
+				"{projectRoot}/coverage"
+			],
+			"cache": true
+		},
+		"lint": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"eslint --fix"
+				],
+				"parallel": false
+			},
+			"inputs": ["default"],
+			"cache": true
+		},
+		"prepack": {
+			"dependsOn": ["build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"fetch-exports"
+				],
+				"parallel": false
+			}
+		}
+	}
+}

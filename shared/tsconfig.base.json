@@ -3,8 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "target": "ES2022",
-    "lib": ["DOM", "ESNext"],
-    "module": "ESNext",
+    "lib": ["DOM", "ES2015", "ES2022"],
+    "module": "ES2022",
     "moduleResolution": "Bundler",
     "baseUrl": ".",
     "paths": {},
@@ -16,7 +16,6 @@
     "noEmitOnError": true,
     "declaration": true,
     "emitDeclarationOnly": true
-    
   },
   "exclude": [
     "node_modules",

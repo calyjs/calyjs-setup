@@ -5,14 +5,17 @@ import type { PluginsOptions } from '../types.mjs';
 
 const definePlugins = (plugins?: PluginsOptions): readonly Plugin[] => {
 	const { node: nodeOverride, babel: babelOverride, ...restOfPlugins } = plugins ?? {};
+	const pluginOverrides = Object.values(restOfPlugins).filter((plugin): plugin is Plugin =>
+		Boolean(plugin)
+	);
 
 	return [
-		...Object.values(restOfPlugins).filter((plugin): plugin is Plugin => Boolean(plugin)),
-		nodeOverride ?? nodeResolve({ extensions: ['.ts', '.tsx'] }),
+		...pluginOverrides,
+		nodeOverride ?? nodeResolve({ extensions: ['.js', '.jsx', '.ts', '.tsx'] }),
 		babelOverride ??
 			babel({
 				babelHelpers: 'bundled',
-				extensions: ['.ts', '.tsx'],
+				extensions: ['.js', '.jsx', '.ts', '.tsx'],
 				plugins: [
 					'annotate-pure-calls', // babel-plugin-annotate-pure-calls
 				],

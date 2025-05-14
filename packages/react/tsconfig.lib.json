@@ -1,0 +1,12 @@
+{
+  "extends": "@calyjs-setup/shared/tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["DOM", "ES2015", "ES2022"],
+    "outDir": "out-tsc",
+    "jsx": "react-jsx"
+  },
+  "include": ["src/"],
+  "exclude": [
+    "src/**/__tests__/"
+  ]
+}

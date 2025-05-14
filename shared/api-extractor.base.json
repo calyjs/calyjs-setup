@@ -1,16 +1,19 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
   "bundledPackages": [],
-  "newlineKind": "crlf",
+  "newlineKind": "lf",
   "enumMemberOrder": "preserve",
+	"projectFolder": ".",
+	"mainEntryPointFilePath": "<projectFolder>/out-tsc/src/index.d.ts",
   "compiler": {
-    "tsconfigFilePath": "<projectFolder>/tsconfig.json",
-    "skipLibCheck": false,
+    "tsconfigFilePath": "<projectFolder>/tsconfig.lib.json",
     "overrideTsconfig": {
       "compilerOptions": {
         "moduleResolution": "Bundler",
+        "target": "ES2022",
+        "lib": ["DOM", "ES2015", "ES2022"],
         "types": ["node", "resize-observer-browser"],
-        "paths": []
+        "skipLibCheck": true
       }
     }
   },

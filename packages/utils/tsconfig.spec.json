@@ -7,8 +7,9 @@
     "incremental": false
   },
   "include": [
-    "test/",
-    "src/**/__tests__/*.spec.ts",
-    "src/**/__tests__/*.test.ts"
+    "test/**/*.spec.*",
+    "test/**/*.test.*",
+    "src/**/__tests__/*.spec.*",
+    "src/**/__tests__/*.test.*"
   ]
 }

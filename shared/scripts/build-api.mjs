@@ -83,9 +83,9 @@ import { glob } from 'glob';
 			const filePath = configFile.dtsRollup?.untrimmedFilePath;
 			if (filePath) {
 				const path = filePath.replace('<projectFolder>', configFile.projectFolder ?? '.');
-				echo(chalk.cyan(`\v\rCreating file ${chalk.greenBright(path)}`));
+				echo(chalk.cyan(`Replacing "React_2" for "React" from ${chalk.greenBright(path)}`));
 				const dtsFile = await fs.readFile(path, 'utf-8');
-				await fs.writeFile(path, dtsFile);
+				await fs.writeFile(path, dtsFile.replace(/React_2/g, 'React'));
 				const mdtsPath = path.replace(/\.d\.ts$/, '.d.mts');
 				echo(
 					chalk.cyan(

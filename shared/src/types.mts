@@ -27,7 +27,7 @@ export type NormalizedOutput = OutputProps & {
 };
 
 export type Options = {
-	input: Array<InputOptions>;
+	input?: Array<InputOptions>;
 	plugins?: PluginsOptions;
 	globals?: GlobalsOption;
 	outputs?: Partial<Record<OutputFormat, OutputOptions>>;
