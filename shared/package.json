@@ -11,12 +11,6 @@
   "main": "dist/src/index.mjs",
   "module": "dist/src/index.mjs",
   "types": "dist/src/index.d.mts",
-  "files": [
-    "dist",
-    "babel.base.mjs",
-    "tsconfig.base.json",
-    "api-extractor.base.json"
-  ],
   "scripts": {
     "build": "tsc -b",
     "clean": "rimraf dist",

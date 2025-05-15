@@ -39,8 +39,8 @@
     "prepack": "nx run @calyjs-setup/react:prepack --verbose"
   },
   "peerDependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": ">=19.1.0",
+    "react-dom": ">=19.1.0"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",

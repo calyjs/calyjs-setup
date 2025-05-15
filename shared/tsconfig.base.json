@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "noEmitOnError": true,
     "declaration": true,
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
   },
   "exclude": [
     "node_modules",

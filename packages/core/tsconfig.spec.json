@@ -2,7 +2,7 @@
   "extends": "@calyjs-setup/shared/tsconfig.base.json",
   "compilerOptions": {
     "composite": false,
-    "types": ["jest"],
+    "types": ["jest", "@calyjs-setup/shared/env"],
     "noEmit": true,
     "incremental": false
   },

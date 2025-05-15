@@ -3,6 +3,9 @@ import type { Config } from 'jest';
 const ignorePatterns = ['<rootDir>/dist/', '<rootDir>/out-tsc/', '<rootDir>/node_modules/'];
 
 export const jestConfig: Config = {
+	globals: {
+		__DEV__: true,
+	},
 	verbose: true,
 	clearMocks: true,
 	passWithNoTests: false,
