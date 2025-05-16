@@ -14,26 +14,8 @@
 				"parallel": false
 			}
 		},
-		"build": {
-			"dependsOn": ["clean", "^build"],
-      "executor": "nx:run-commands",
-			"options": {
-				"cwd": "packages/react",
-				"commands": [
-					"build-api --tsc tsconfig.lib.json",
-					"rollup --config"
-				],
-				"parallel": false
-			},
-			"inputs": ["production"],
-  		"outputs": [
-				"{projectRoot}/dist",
-				"{projectRoot}/out-tsc"
-			],
-			"cache": true
-		},
 		"test": {
-			"dependsOn": ["build"],
+			"dependsOn": ["clean"],
       "executor": "nx:run-commands",
 			"options": {
 				"cwd": "packages/react",
@@ -50,7 +32,7 @@
 			"cache": true
 		},
 		"lint": {
-			"dependsOn": ["build"],
+			"dependsOn": ["clean"],
       "executor": "nx:run-commands",
 			"options": {
 				"cwd": "packages/react",
@@ -60,6 +42,24 @@
 				"parallel": false
 			},
 			"inputs": ["default"],
+			"cache": true
+		},
+		"build": {
+			"dependsOn": ["test", "lint", "^build"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "packages/react",
+				"commands": [
+					"build-api --tsc tsconfig.lib.json",
+					"rollup --config"
+				],
+				"parallel": false
+			},
+			"inputs": ["production"],
+  		"outputs": [
+				"{projectRoot}/dist",
+				"{projectRoot}/out-tsc"
+			],
 			"cache": true
 		},
 		"prepack": {

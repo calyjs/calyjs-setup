@@ -33,9 +33,9 @@
 	],
 	"scripts": {
 		"clean": "nx run @calyjs-setup/core:clean",
-		"build": "nx run @calyjs-setup/core:build --verbose",
 		"test": "nx run @calyjs-setup/core:test --verbose",
 		"lint": "nx run @calyjs-setup/core:lint --verbose",
+		"build": "nx run @calyjs-setup/core:build --verbose",
 		"prepack": "nx run @calyjs-setup/core:prepack --verbose"
 	},
 	"dependencies": {
@@ -45,14 +45,7 @@
 		"@calyjs-setup/shared": "workspace:*"
 	},
 	"keywords": [
-		"calyjs-setup",
-		"calendar",
-		"clock",
-		"javascript",
-		"typescript",
-		"date",
-		"time",
-		"datetime"
+		"core"
 	],
 	"repository": {
 		"type": "git",

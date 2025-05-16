@@ -5,7 +5,8 @@
     "packageManager": "pnpm"
   },
   "workspaceLayout": {
-    "libsDir": "packages"
+    "libsDir": "packages",
+    "appsDir": "website"
   },
   "namedInputs": {
     "default": [

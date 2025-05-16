@@ -32,20 +32,16 @@
 	],
 	"scripts": {
 		"clean": "nx run @calyjs-setup/utils:clean",
-		"build": "nx run @calyjs-setup/utils:build --verbose",
 		"test": "nx run @calyjs-setup/utils:test --verbose",
 		"lint": "nx run @calyjs-setup/utils:lint --verbose",
+		"build": "nx run @calyjs-setup/utils:build --verbose",
 		"prepack": "nx run @calyjs-setup/utils:prepack --verbose"
 	},
 	"devDependencies": {
 		"@calyjs-setup/shared": "workspace:*"
 	},
 	"keywords": [
-		"calendar",
-		"javascript",
-		"typescript",
-		"utils",
-		"utilities"
+		"utils"
 	],
 	"repository": {
 		"type": "git",

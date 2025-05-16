@@ -33,9 +33,9 @@
   ],
   "scripts": {
     "clean": "nx run @calyjs-setup/react:clean",
-    "build": "nx run @calyjs-setup/react:build --verbose",
     "test": "nx run @calyjs-setup/react:test --verbose",
     "lint": "nx run @calyjs-setup/react:lint --verbose",
+    "build": "nx run @calyjs-setup/react:build --verbose",
     "prepack": "nx run @calyjs-setup/react:prepack --verbose"
   },
   "peerDependencies": {
@@ -50,14 +50,7 @@
     "@types/react-dom": "^19.1.5"
   },
   "keywords": [
-    "calyjs-setup",
-    "calendar",
-    "clock",
-    "javascript",
-    "typescript",
-    "date",
-    "time",
-    "datetime"
+    "react"
   ],
   "repository": {
     "type": "git",
