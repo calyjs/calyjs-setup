@@ -2,7 +2,7 @@
 	"name": "@calyjs-setup/website",
 	"root": "website",
 	"sourceRoot": "website/src",
-	"projectType": "library",
+	"projectType": "application",
 	"targets": {
 		"build": {
 			"dependsOn": [
