@@ -1,0 +1,68 @@
+name: Monorepo CI
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  lint:
+    name: Lint Affected Projects
+    runs-on: ubuntu-latest
+    env:
+      BASE: ${{ github.event.pull_request.base.sha || 'origin/master' }}
+      HEAD: ${{ github.event.pull_request.head.sha || 'HEAD' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+
+      - name: Run lint on affected projects
+        run: pnpm nx affected:lint --base=$BASE --head=$HEAD
+        shell: bash
+
+  test:
+    name: Test Affected Projects
+    runs-on: ubuntu-latest
+    env:
+      BASE: ${{ github.event.pull_request.base.sha || 'origin/master' }}
+      HEAD: ${{ github.event.pull_request.head.sha || 'HEAD' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+
+      - name: Run tests on affected projects
+        run: pnpm nx affected:test --base=$BASE --head=$HEAD
+        shell: bash
+  
+  build:
+    name: Build Affected Projects
+    runs-on: ubuntu-latest
+    env:
+      BASE: ${{ github.event.pull_request.base.sha || 'origin/master' }}
+      HEAD: ${{ github.event.pull_request.head.sha || 'HEAD' }}
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+
+      - name: Run build on affected projects
+        run: pnpm nx affected:build --base=$BASE --head=$HEAD
+        shell: bash

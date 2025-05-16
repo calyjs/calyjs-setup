@@ -1,0 +1,10 @@
+{
+  "extends": "@calyjs-setup/shared/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "out-tsc"
+  },
+  "include": ["src/"],
+  "exclude": [
+    "src/**/__tests__/"
+  ]
+}

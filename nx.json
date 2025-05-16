@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "defaultBase": "master",
+  "cli": {
+    "packageManager": "pnpm"
+  },
+  "workspaceLayout": {
+    "libsDir": "packages",
+    "appsDir": "website"
+  },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "!{projectRoot}/dist/**",
+      "!{projectRoot}/out-tsc/**",
+			"!{projectRoot}/*.md"
+    ],
+    "production": [
+      "{projectRoot}/src/**",
+      "{projectRoot}/.babelrc.mjs",
+      "{projectRoot}/api-extractor.json",
+      "{projectRoot}/rollup.config.mjs",
+      "{projectRoot}/tsconfig.json"
+    ]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": true
+    }
+  }
+}

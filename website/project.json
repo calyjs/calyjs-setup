@@ -1,0 +1,30 @@
+{
+	"name": "@calyjs-setup/website",
+	"root": "website",
+	"sourceRoot": "website/src",
+	"projectType": "application",
+	"targets": {
+		"build": {
+			"dependsOn": [
+				"clear",
+				"write-translations",
+				"write-heading-ids",
+				"^build"
+			],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "website",
+				"commands": [
+					"docusaurus build"
+				],
+				"parallel": false
+			},
+			"inputs": ["production"],
+  		"outputs": [
+				"{projectRoot}/i18n",
+				"{projectRoot}/build"
+			],
+			"cache": true
+		}
+	}
+}

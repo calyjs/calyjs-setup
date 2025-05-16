@@ -1,0 +1,16 @@
+{
+  "extends": "@calyjs-setup/shared/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "types": ["jest", "@calyjs-setup/shared/env"],
+    "noEmit": true,
+    "incremental": false,
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "test/**/*.spec.*",
+    "test/**/*.test.*",
+    "src/**/__tests__/*.spec.*",
+    "src/**/__tests__/*.test.*"
+  ]
+}
