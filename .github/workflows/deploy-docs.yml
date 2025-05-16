@@ -37,7 +37,6 @@ jobs:
     name: "Release Docs website version"
     needs: default-branch-check
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     permissions:
       contents: write
     env:
@@ -83,6 +82,8 @@ jobs:
     name: Deploy Docusaurus Website
     needs: release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
 
       - name: Checkout repository

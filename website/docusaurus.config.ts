@@ -11,15 +11,15 @@ const config: Config = {
 	trailingSlash: true, // for GitHub pages
 
 	// Set the production url of your site here
-	url: 'https://your-docusaurus-site.example.com',
+	url: 'https://calyjs.github.io',
 	// Set the /<baseUrl>/ pathname under which your site is served
 	// For GitHub pages deployment, it is often '/<projectName>/'
-	baseUrl: '/',
+	baseUrl: '/calyjs-setup/',
 
 	// GitHub pages deployment config.
 	// If you aren't using GitHub pages, you don't need these.
-	organizationName: 'facebook', // Usually your GitHub org/user name.
-	projectName: 'docusaurus', // Usually your repo name.
+	organizationName: 'calyjs', // Usually your GitHub org/user name.
+	projectName: 'calyjs-setup', // Usually your repo name.
 
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
