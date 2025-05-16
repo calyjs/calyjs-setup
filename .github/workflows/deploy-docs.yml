@@ -83,9 +83,6 @@ jobs:
     name: Deploy Docusaurus Website
     needs: release
     runs-on: ubuntu-latest
-    env:
-      BASE: ${{ github.ref_name }}
-      HEAD: ${{ github.sha }}
     steps:
 
       - name: Checkout repository
