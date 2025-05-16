@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "nx run-many --target build",
-    "test": "nx run-many --target test --yes",
+    "test": "nx run-many --target test",
     "lint": "nx run-many --target lint",
     "prepare": "husky"
   },
