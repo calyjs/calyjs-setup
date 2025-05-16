@@ -66,10 +66,10 @@ jobs:
 
       - name: "Configure Git"
         run: |
-          git config --local user.name "${{ github.actor }}"
-          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           echo "Configured Git user:"
-          git config --list --local
+          git config --list --global
         shell: bash
 
       - name: "Run NX Release script"
@@ -96,10 +96,10 @@ jobs:
 
       - name: "Configure Git"
         run: |
-          git config --local user.name "${{ github.actor }}"
-          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           echo "Configured Git user:"
-          git config --list --local
+          git config --list --global
         shell: bash
 
       - name: Deploy to GitHub Pages
