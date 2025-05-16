@@ -54,6 +54,10 @@
     "shared/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "website/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "author": {

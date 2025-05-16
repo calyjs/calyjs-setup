@@ -24,7 +24,7 @@ const { chalk, echo } = require('zx');
       description:
         'Project name to release',
       type: 'string',
-      default: 'website'
+      default: '@calyjs-setup/website'
     })
     .option('verbose', {
       description: 'Enable verbose logging',
