@@ -94,6 +94,14 @@ jobs:
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
 
+      - name: "Configure Git"
+        run: |
+          git config --local user.name "${{ github.actor }}"
+          git config --local user.email "${{ github.actor }}@users.noreply.github.com"
+          echo "Configured Git user:"
+          git config --list --local
+        shell: bash
+
       - name: Deploy to GitHub Pages
         run: pnpm nx run website:deploy
         shell: bash
