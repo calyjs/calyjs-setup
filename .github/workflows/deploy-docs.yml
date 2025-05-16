@@ -41,7 +41,6 @@ jobs:
     permissions:
       contents: write
     env:
-      BASE: ${{ github.ref_name }}
       HEAD: ${{ github.sha }}
     steps:
 
@@ -56,7 +55,7 @@ jobs:
       - name: Check if website is affected
         id: check_affected
         run: |
-          AFFECTED=$(pnpm nx show projects --affected --base=$BASE --head=$HEAD)
+          AFFECTED=$(pnpm nx show projects --affected --base='origin/master~1' --head=$HEAD)
           echo "Affected projects: $AFFECTED"
           if [[ "$AFFECTED" != *"website"* ]]; then
             echo "Website not affected. Skipping deploy."
