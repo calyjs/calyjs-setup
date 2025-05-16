@@ -99,3 +99,4 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: pnpm nx run website:deploy
+        shell: bash

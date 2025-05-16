@@ -25,6 +25,7 @@ jobs:
 
       - name: Run lint on affected projects
         run: pnpm nx affected:lint --base=$BASE --head=$HEAD
+        shell: bash
 
   test:
     name: Test Affected Projects
@@ -44,6 +45,7 @@ jobs:
 
       - name: Run tests on affected projects
         run: pnpm nx affected:test --base=$BASE --head=$HEAD
+        shell: bash
   
   build:
     name: Build Affected Projects
@@ -52,7 +54,7 @@ jobs:
       BASE: ${{ github.event.pull_request.base.sha || 'origin/master' }}
       HEAD: ${{ github.event.pull_request.head.sha || 'HEAD' }}
     steps:
-      
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -63,3 +65,4 @@ jobs:
 
       - name: Run build on affected projects
         run: pnpm nx affected:build --base=$BASE --head=$HEAD
+        shell: bash
