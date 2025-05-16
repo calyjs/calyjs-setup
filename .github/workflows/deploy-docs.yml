@@ -103,7 +103,7 @@ jobs:
         shell: bash
 
       - name: Deploy to GitHub Pages
-        run: pnpm nx run website:deploy
+        run: pnpm nx run website:deploy -- --repo=$REPO_URL
         shell: bash
         env:
           GIT_USER: ${{ github.actor }}
