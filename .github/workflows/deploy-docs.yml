@@ -44,6 +44,12 @@ jobs:
       BASE: ${{ github.ref_name }}
       HEAD: ${{ github.sha }}
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
 
@@ -82,6 +88,12 @@ jobs:
       BASE: ${{ github.ref_name }}
       HEAD: ${{ github.sha }}
     steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
 
