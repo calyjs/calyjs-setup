@@ -8,6 +8,21 @@
     "libsDir": "packages",
     "appsDir": "website"
   },
+  "release": {
+    "projects": [
+      "packages/*",
+      "@calyjs-setup/website"
+    ],
+    "projectsRelationship": "independent",
+    "releaseTagPattern": "{projectName}@{version}",
+    "version": {
+      "conventionalCommits": true
+    },
+    "changelog": {
+      "automaticFromRef": true,
+      "projectChangelogs": true
+    }
+  },
   "namedInputs": {
     "default": [
       "{projectRoot}/**/*",
