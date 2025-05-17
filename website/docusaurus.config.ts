@@ -20,7 +20,6 @@ const config: Config = {
 	// If you aren't using GitHub pages, you don't need these.
 	organizationName: 'calyjs', // Usually your GitHub org/user name.
 	projectName: 'calyjs-setup', // Usually your repo name.
-	deploymentBranch: 'master',
 
 	onBrokenLinks: 'throw',
 	onBrokenMarkdownLinks: 'warn',
