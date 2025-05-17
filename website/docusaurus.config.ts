@@ -8,7 +8,7 @@ const config: Config = {
 	title: 'My Site',
 	tagline: 'Dinosaurs are cool',
 	favicon: 'img/favicon.ico',
-	trailingSlash: true, // for GitHub pages
+	trailingSlash: false, // for GitHub pages
 
 	// Set the production url of your site here
 	url: 'https://calyjs.github.io',
