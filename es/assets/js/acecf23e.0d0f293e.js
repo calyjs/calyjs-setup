@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_calyjs_setup_website=self.webpackChunk_calyjs_setup_website||[]).push([[1903],{1912:s=>{s.exports=JSON.parse('{"blogBasePath":"/calyjs-setup/es/blog","blogTitle":"Blog","authorsListPath":"/calyjs-setup/es/blog/authors"}')}}]);
