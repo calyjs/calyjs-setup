@@ -78,6 +78,7 @@ const { chalk, echo } = require('zx');
       createRelease: 'github',
       gitCommit: true,
       gitTag: true,
+      gitPush: true
     });
 
     echo(`\n${chalk.bgGreen.bold(' Docs changelog generation succeeded ')}\n`);
