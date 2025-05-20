@@ -37,6 +37,10 @@ const { chalk, echo } = require('zx');
     ##==========================================\n`));
 
   try {
+
+    // Checkout to release branch (or create it if it doesn't exist)
+    execSync('git checkout -B release', { stdio: 'inherit' });
+
     const commonProps = {
       projects: [ '@calyjs-setup/website' ],
       firstRelease: true,
