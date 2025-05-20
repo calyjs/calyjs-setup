@@ -42,6 +42,9 @@ const { execSync } = require('child_process');
     // Checkout to release branch (or create it if it doesn't exist)
     execSync('git checkout -B release', { stdio: 'inherit' });
 
+    // Set upstream for 'release' branch
+    execSync('git push --set-upstream origin release', { stdio: 'inherit' });
+
     const commonProps = {
       projects: [ '@calyjs-setup/website' ],
       firstRelease: true,
