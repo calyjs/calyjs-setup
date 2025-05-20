@@ -7,6 +7,7 @@ const {
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
 const { execSync } = require('child_process');
+const DOCS_PROJECT_NAME = 'website';
 
 (async () => {
   const options = await yargs
@@ -76,9 +77,13 @@ const { execSync } = require('child_process');
       }
     }
 
+    // Detect if this is the first release by checking if website tag exist
+    const tags = execSync('git tag --list', { encoding: 'utf8' });
+    const firstRelease = !tags.includes(`${DOCS_PROJECT_NAME}@`);
+
     const commonProps = {
-      projects: ['website'],
-      firstRelease: true,
+      firstRelease,
+      projects: [DOCS_PROJECT_NAME],
       dryRun: isDryRun,
       verbose: isVerbose,
     };
