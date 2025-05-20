@@ -20,12 +20,6 @@ const { chalk, echo } = require('zx');
       type: 'boolean',
       default: false,
     })
-    .option('projectName', {
-      description:
-        'Project name to release',
-      type: 'string',
-      default: '@calyjs-setup/website'
-    })
     .option('verbose', {
       description: 'Enable verbose logging',
       type: 'boolean',
@@ -44,7 +38,7 @@ const { chalk, echo } = require('zx');
 
   try {
     const commonProps = {
-      projects: [ options.projectName ],
+      projects: [ '@calyjs-setup/website' ],
       firstRelease: true,
       dryRun: options.dryRun,
       verbose: options.verbose,
