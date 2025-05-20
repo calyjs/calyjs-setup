@@ -71,7 +71,7 @@ jobs:
         run: node ./scripts/release-docs.js --verbose --version ${{ inputs.version-bump }}
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create release PR
         uses: ./.github/actions/create-pr
