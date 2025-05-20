@@ -1,5 +1,5 @@
 {
-	"name": "@calyjs-setup/react",
+	"name": "react",
 	"root": "packages/react",
 	"sourceRoot": "packages/react/src",
 	"projectType": "library",

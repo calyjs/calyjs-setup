@@ -12,47 +12,78 @@ const { execSync } = require('child_process');
   const options = await yargs
     .version(false)
     .option('version', {
-      description: 'Explicit version specifier to use (e.g., patch, minor, major)',
+      description: 'Version bump type (e.g., patch, minor, major)',
       type: 'string',
       default: 'prerelease',
     })
     .option('dryRun', {
-      description: 'Perform a dry run without making changes',
+      description: 'Run without making changes',
       type: 'boolean',
       default: false,
     })
+    .option('targetBranch', {
+      description: 'Run without making changes',
+      type: 'string',
+      default: 'release',
+    })
     .option('verbose', {
-      description: 'Enable verbose logging',
+      description: 'Enable verbose output',
       type: 'boolean',
       default: false,
     })
     .parseAsync();
 
-  echo(chalk.white(`
-    ##==========================================
-    ##
-    ##       ${chalk.bold('path: scripts/release-docs.js')}
-    ##
-    ##     ${chalk.magenta.bold('CalyJS-Setup Docs Release')}
-    ##
-    ##==========================================\n`));
+  echo(chalk.cyanBright(`
+    ┌─────────────────────────────────────────────┐
+    │                                             │
+    │   📘  ${chalk.bold('CalyJS Docs Release')}                   │
+    │   🛠️   ${chalk.gray('Script: scripts/release-docs.js')}       │
+    │                                             │
+    └─────────────────────────────────────────────┘
+  `));
+
+  const branchName = options.targetBranch;
+  const isDryRun = options.dryRun;
+  const isVerbose = options.verbose;
+
+  echo(chalk.gray(`Checking if remote branch '${branchName}' exists...\n`));
+  let releaseBranchExists = false;
 
   try {
+    const result = execSync(`git ls-remote --heads origin ${branchName}`, { encoding: 'utf8' });
+    releaseBranchExists = result.includes(`refs/heads/${branchName}`);
+  } catch {
+    releaseBranchExists = false;
+  }
 
-    // Checkout to release branch (or create it if it doesn't exist)
-    execSync('git checkout -B release', { stdio: 'inherit' });
-
-    // Set upstream for 'release' branch
-    execSync('git push --set-upstream origin release', { stdio: 'inherit' });
+  try {
+    if (releaseBranchExists) {
+      echo(chalk.green(`Remote branch '${branchName}' found. Checking out and pulling latest changes...\n`));
+      if (isDryRun) {
+        echo(chalk.yellow(`[dry-run] Would checkout and pull '${branchName}' branch.`));
+      } else {
+        execSync(`git checkout ${branchName}`, { stdio: 'inherit' });
+        execSync(`git pull origin ${branchName}`, { stdio: 'inherit' });
+      }
+    } else {
+      echo(chalk.yellow(`Remote branch '${branchName}' not found. Creating new branch...\n`));
+      if (isDryRun) {
+        echo(chalk.yellow(`[dry-run] Would run: git checkout -b ${branchName}`));
+        echo(chalk.yellow(`[dry-run] Would run: git push --set-upstream origin ${branchName}`));
+      } else {
+        execSync(`git checkout -b ${branchName}`, { stdio: 'inherit' });
+        execSync(`git push --set-upstream origin ${branchName}`, { stdio: 'inherit' });
+      }
+    }
 
     const commonProps = {
-      projects: [ '@calyjs-setup/website' ],
+      projects: ['website'],
       firstRelease: true,
-      dryRun: options.dryRun,
-      verbose: options.verbose,
+      dryRun: isDryRun,
+      verbose: isVerbose,
     };
 
-    echo(`\n${chalk.cyanBright.bold('Releasing documentation site version using NX API')}\n`);
+    echo(`\n${chalk.bold.cyanBright('Starting version bump using NX release API...')}\n`);
 
     const { projectsVersionData, workspaceVersion } = await releaseVersion({
       ...commonProps,
@@ -68,9 +99,9 @@ const { execSync } = require('child_process');
       gitTag: false,
     });
 
-    echo(`\n${chalk.bgGreen.bold(' Docs version bump succeeded ')}\n`);
+    echo(chalk.bgGreen.black(`\n✔️  Version bump complete. New version: ${workspaceVersion} \n`));
 
-    echo(`\n${chalk.cyanBright.bold('Generating and committing changelog')}\n`);
+    echo(`${chalk.bold.cyanBright('Generating changelog and finalizing release...')}\n`);
 
     await releaseChangelog({
       ...commonProps,
@@ -80,22 +111,30 @@ const { execSync } = require('child_process');
       createRelease: 'github',
       gitCommit: true,
       gitTag: true,
-      gitPush: true
+      gitPush: true,
     });
 
-    echo(`\n${chalk.bgGreen.bold(' Docs changelog generation succeeded ')}\n`);
+    echo(chalk.bgGreen.black(`\n✅ Changelog generated and pushed to '${branchName}' branch.\n`));
 
-    echo(chalk.white(`
-      ##==========================================
-      ##
-      ##       ${chalk.bold('path: scripts/release-docs.js')}
-      ##
-      ##  ${chalk.magenta.bold('CalyJS-Setup Docs Release Complete')}
-      ##
-      ##==========================================\n`));
+    echo(chalk.cyanBright(`
+      \r ${chalk.bold('Documentation release completed successfully!\n')}
+      \r   📌 Branch:        ${branchName}
+      \r   📌 Version:       ${workspaceVersion}
+      \r   📌 Dry Run:       ${isDryRun ? 'Yes' : 'No'}
+      \r   📌 Verbose Mode:  ${isVerbose ? 'Enabled' : 'Disabled'}
+    `));
+
+    echo(chalk.gray(`
+      \r ─────────────────────────────────────────────
+      \r   ✅ Done — docs release process finished.
+      \r ─────────────────────────────────────────────\n
+    `));
+    
     process.exit(0);
+
   } catch (err) {
-    echo(chalk.redBright.bold(`\n${err}`));
+    echo(chalk.redBright.bold(`\n❌ Release failed: ${err.message || err}\n`));
+    echo(chalk.gray(`Please check the logs above for more details.\n`));
     process.exit(1);
   }
 })();

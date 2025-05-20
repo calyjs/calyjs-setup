@@ -32,11 +32,11 @@
     "README.md"
   ],
   "scripts": {
-    "clean": "nx run @calyjs-setup/react:clean",
-    "test": "nx run @calyjs-setup/react:test --verbose",
-    "lint": "nx run @calyjs-setup/react:lint --verbose",
-    "build": "nx run @calyjs-setup/react:build --verbose",
-    "prepack": "nx run @calyjs-setup/react:prepack --verbose"
+    "clean": "nx run react:clean",
+    "test": "nx run react:test --verbose",
+    "lint": "nx run react:lint --verbose",
+    "build": "nx run react:build --verbose",
+    "prepack": "nx run react:prepack --verbose"
   },
   "peerDependencies": {
     "react": ">=19.1.0",

@@ -31,11 +31,11 @@
 		"README.md"
 	],
 	"scripts": {
-		"clean": "nx run @calyjs-setup/utils:clean",
-		"test": "nx run @calyjs-setup/utils:test --verbose",
-		"lint": "nx run @calyjs-setup/utils:lint --verbose",
-		"build": "nx run @calyjs-setup/utils:build --verbose",
-		"prepack": "nx run @calyjs-setup/utils:prepack --verbose"
+		"clean": "nx run utils:clean",
+		"test": "nx run utils:test --verbose",
+		"lint": "nx run utils:lint --verbose",
+		"build": "nx run utils:build --verbose",
+		"prepack": "nx run utils:prepack --verbose"
 	},
 	"devDependencies": {
 		"@calyjs-setup/shared": "workspace:*"
