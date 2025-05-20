@@ -63,7 +63,13 @@ jobs:
             exit 0
           fi
 
-      - name: "Run NX Release script"
+      - name: Configure Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+        shell: bash
+
+      - name: Run NX Release script
         run: node ./scripts/release-docs.js --verbose --version ${{ inputs.version-bump }}
         shell: bash
         
@@ -93,12 +99,10 @@ jobs:
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
 
-      - name: "Configure Git"
+      - name: Configure Git
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          echo "Configured Git user:"
-          git config --list --global
         shell: bash
 
       - name: Deploy to GitHub Pages
