@@ -52,7 +52,6 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Check if website is affected
-        id: check_affected
         run: |
           AFFECTED=$(pnpm nx show projects --affected --base='origin/master~1' --head=$HEAD)
           echo "Affected projects: $AFFECTED"
@@ -64,19 +63,19 @@ jobs:
             exit 0
           fi
 
-      - name: "Configure Git"
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          echo "Configured Git user:"
-          git config --list --global
-        shell: bash
-
       - name: "Run NX Release script"
         run: node ./scripts/release-docs.js --verbose --version ${{ inputs.version-bump }}
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Create release PR
+        uses: ./.github/actions/create-pr
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release
+          base: master
+          title: 'chore(release): version bump'
+          body: 'This PR includes version bump and changelog update.'
+          commit-message: 'chore(release): version bump'
 
   deploy-docs:
     name: Deploy Docusaurus Website
