@@ -1,5 +1,5 @@
 {
-	"name": "@calyjs-setup/core",
+	"name": "core",
 	"root": "packages/core",
 	"sourceRoot": "packages/core/src",
 	"projectType": "library",

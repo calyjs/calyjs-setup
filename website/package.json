@@ -6,7 +6,7 @@
 		"docusaurus": "docusaurus",
 		"start": "docusaurus start",
 		"clear": "docusaurus clear",
-		"build": "nx run @calyjs-setup/website:build --verbose",
+		"build": "nx run website:build --verbose",
 		"swizzle": "docusaurus swizzle",
 		"deploy": "docusaurus deploy",
 		"serve": "docusaurus serve",

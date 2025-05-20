@@ -32,11 +32,11 @@
 		"README.md"
 	],
 	"scripts": {
-		"clean": "nx run @calyjs-setup/core:clean",
-		"test": "nx run @calyjs-setup/core:test --verbose",
-		"lint": "nx run @calyjs-setup/core:lint --verbose",
-		"build": "nx run @calyjs-setup/core:build --verbose",
-		"prepack": "nx run @calyjs-setup/core:prepack --verbose"
+		"clean": "nx run core:clean",
+		"test": "nx run core:test --verbose",
+		"lint": "nx run core:lint --verbose",
+		"build": "nx run core:build --verbose",
+		"prepack": "nx run core:prepack --verbose"
 	},
 	"dependencies": {
 		"@calyjs-setup/utils": "workspace:*"

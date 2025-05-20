@@ -1,0 +1,84 @@
+name: Create Docs release tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-bump:
+        type: choice
+        description: 'Select the version bump to perform.'
+        required: true
+        default: 'patch'
+        options:
+          - major
+          - minor
+          - patch
+          - premajor
+          - preminor
+          - prepatch
+          - prerelease
+
+concurrency:
+  group: release-docs-${{ github.workflow }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  default-branch-check:
+    name: "Branch Name check"
+    runs-on: ubuntu-latest
+    steps:
+      - if: github.ref_name != 'master'
+        run: |
+          echo "Unable to release version for branch $GITHUB_REF"
+          exit 1
+      - name: "Branch Name check passed"
+        run: exit 0
+  
+  release:
+    name: "Release Docs website version"
+    needs: default-branch-check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+
+      - name: Check if website is affected
+        run: |
+          AFFECTED=$(pnpm nx show projects --affected --base='origin/master~1' --head=${{ github.sha }})
+          echo "Affected projects: $AFFECTED"
+          if [[ "$AFFECTED" != *"website"* ]]; then
+            echo "Website not affected. Skipping deploy."
+            exit 1
+          else
+            echo "Website affected. Continue with deploy release process..."
+            exit 0
+          fi
+        
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        shell: bash
+
+      - name: Run NX Release script
+        run: node ./scripts/release-docs.js --verbose --version ${{ inputs.version-bump }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Create release PR
+        uses: ./.github/actions/create-pr
+        with:
+          token: ${{ secrets.GH_PAT }}
+          branch: release
+          base: master
+          title: 'chore(release): version bump'
+          body: 'This PR includes version bump and changelog update.'
+          commit-message: 'chore(release): version bump'

@@ -11,7 +11,7 @@
   "release": {
     "projects": [
       "packages/*",
-      "@calyjs-setup/website"
+      "website"
     ],
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}@{version}",

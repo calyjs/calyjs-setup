@@ -1,5 +1,5 @@
 {
-	"name": "@calyjs-setup/website",
+	"name": "website",
 	"root": "website",
 	"sourceRoot": "website/src",
 	"projectType": "application",
