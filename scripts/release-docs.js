@@ -6,6 +6,7 @@ const {
 } = require('nx/release');
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
+const { execSync } = require('child_process');
 
 (async () => {
   const options = await yargs
