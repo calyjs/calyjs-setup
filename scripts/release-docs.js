@@ -9,6 +9,28 @@ const { chalk, echo } = require('zx');
 const { execSync } = require('child_process');
 const DOCS_PROJECT_NAME = 'website';
 
+// Find the latest tag for the `website` project
+function getLatestProjectTag(project) {
+  try {
+    const tag = execSync(
+      `git tag --list "${project}@*" --sort=-creatordate | head -n 1`,
+      { encoding: 'utf-8' }
+    ).trim();
+    if (!tag) {
+      throw new Error(`No tags found for ${project}`);
+    }
+    return tag;
+  } catch (err) {
+    console.warn(`[WARN] Failed to find latest tag for ${project}.`);
+    return null;
+  }
+}
+
+// Get commit hash from a tag
+function getCommitFromTag(tag) {
+  return execSync(`git rev-list -n 1 ${tag}`, { encoding: 'utf-8' }).trim();
+}
+
 (async () => {
   const options = await yargs
     .version(false)
@@ -38,7 +60,7 @@ const DOCS_PROJECT_NAME = 'website';
     ┌─────────────────────────────────────────────┐
     │                                             │
     │   📘  ${chalk.bold('CalyJS Docs Release')}                   │
-    │   🛠️   ${chalk.gray('Script: scripts/release-docs.js')}       │
+    │   🛠️   ${chalk.gray('Script: scripts/release-docs.js')}      │
     │                                             │
     └─────────────────────────────────────────────┘
   `));
@@ -72,20 +94,25 @@ const DOCS_PROJECT_NAME = 'website';
         echo(chalk.yellow(`[dry-run] Would run: git checkout -b ${branchName}`));
         echo(chalk.yellow(`[dry-run] Would run: git push --set-upstream origin ${branchName}`));
       } else {
-        execSync(`git checkout -b ${branchName}`, { stdio: 'inherit' });
+        execSync(`git checkout -b ${branchName} origin/master`, { stdio: 'inherit' });
         execSync(`git push --set-upstream origin ${branchName}`, { stdio: 'inherit' });
       }
     }
 
-    // Detect if this is the first release by checking if website tag exist
-    const tags = execSync('git tag --list', { encoding: 'utf8' });
-    const firstRelease = !tags.includes(`${DOCS_PROJECT_NAME}@`);
+    const latestTag = getLatestProjectTag(DOCS_PROJECT_NAME);
+    const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
+    const headCommit = execSync('git rev-parse HEAD').toString().trim();
+
+    echo(chalk.gray(`Using base commit: ${baseCommit}`));
+    echo(chalk.gray(`Using head commit: ${headCommit}`));
 
     const commonProps = {
-      firstRelease,
+      firstRelease: !!latestTag,
       projects: [DOCS_PROJECT_NAME],
       dryRun: isDryRun,
       verbose: isVerbose,
+      base: baseCommit,
+      head: headCommit,
     };
 
     echo(`\n${chalk.bold.cyanBright('Starting version bump using NX release API...')}\n`);
