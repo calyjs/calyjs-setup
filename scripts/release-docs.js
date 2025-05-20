@@ -107,7 +107,7 @@ function getCommitFromTag(tag) {
     echo(chalk.gray(`Using head commit: ${headCommit}`));
 
     const commonProps = {
-      firstRelease: !!latestTag,
+      firstRelease: !latestTag,
       projects: [DOCS_PROJECT_NAME],
       dryRun: isDryRun,
       verbose: isVerbose,
