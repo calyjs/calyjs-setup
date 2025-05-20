@@ -76,7 +76,7 @@ jobs:
       - name: Create release PR
         uses: ./.github/actions/create-pr
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           branch: release
           base: master
           title: 'chore(release): version bump'
