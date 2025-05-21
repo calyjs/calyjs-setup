@@ -1,3 +1,13 @@
+## 3.0.2 (2025-05-21)
+
+### 🚀 Features
+
+- **website:** reword docu tutorial ([d68f544](https://github.com/calyjs/calyjs-setup/commit/d68f544))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 3.0.1 (2025-05-21)
 
 This was a version bump only for website to align it with other projects, there were no code changes.
