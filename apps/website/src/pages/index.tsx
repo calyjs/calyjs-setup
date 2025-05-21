@@ -16,6 +16,7 @@ function HomepageHeader() {
 				{/*@ts-ignore*/}
 				<Heading as="h1" className="hero__title">
 					{siteConfig.title}
+					{'hello world'}
 				</Heading>
 				<p className="hero__subtitle">{siteConfig.tagline}</p>
 				<div className={styles.buttons}>
