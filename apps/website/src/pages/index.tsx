@@ -20,7 +20,6 @@ function HomepageHeader() {
 				</Heading>
 				<p className="hero__subtitle">{siteConfig.tagline}</p>
 				<div className={styles.buttons}>
-					{/*@ts-ignore*/}
 					<Link className="button button--secondary button--lg" to="/docs/intro">
 						Docusaurus Tutorial - 100min ⏱️
 					</Link>
