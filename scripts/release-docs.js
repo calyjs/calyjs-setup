@@ -106,7 +106,7 @@ async function run(projectName) {
   const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
   branchSwitch(remoteBranchExists, targetBranch, dryRun);
   const latestTag = getLatestProjectTag(projectName);
-  const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~2').toString().trim();
+  const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
   const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
   const commonProps = {
