@@ -99,7 +99,7 @@ function getCommitFromTag(tag) {
 
     execSync('git fetch --tags', {stdio: 'inherit'});
     const latestTag = getLatestProjectTag(DOCS_PROJECT_NAME);
-    const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse origin/release~1').toString().trim();
+    const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
     const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
     echo(chalk.gray(`Using base commit: ${baseCommit}`));
