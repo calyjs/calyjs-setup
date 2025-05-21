@@ -1,3 +1,17 @@
+## 3.0.4 (2025-05-21)
+
+### 🚀 Features
+
+- **website:** update home page content ([0e4d28a](https://github.com/calyjs/calyjs-setup/commit/0e4d28a))
+
+### 🩹 Fixes
+
+- **website:** remove ts ignore comment ([753d45f](https://github.com/calyjs/calyjs-setup/commit/753d45f))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 3.0.3 (2025-05-21)
 
 ### 🚀 Features
