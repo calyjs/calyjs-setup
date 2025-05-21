@@ -97,29 +97,29 @@ function getCommitFromTag(tag) {
       }
     }
 
-    execSync('git fetch --tags', {stdio: 'inherit'});
-    const latestTag = getLatestProjectTag(DOCS_PROJECT_NAME);
-    const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
-    const headCommit = execSync('git rev-parse HEAD').toString().trim();
+    // execSync('git fetch --tags', {stdio: 'inherit'});
+    // const latestTag = getLatestProjectTag(DOCS_PROJECT_NAME);
+    // const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
+    // const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
-    echo(chalk.gray(`Using base commit: ${baseCommit}`));
-    echo(chalk.gray(`Using head commit: ${headCommit}`));
+    // echo(chalk.gray(`Using base commit: ${baseCommit}`));
+    // echo(chalk.gray(`Using head commit: ${headCommit}`));
 
-    const commits = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
-      encoding: 'utf-8'
-    }).trim();
+    // const commits = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
+    //   encoding: 'utf-8'
+    // }).trim();
 
-    if (!commits) {
-      echo(chalk.yellow(`No commits found  between base(${baseCommit}) and head(${headCommit})`));
-    } else {
-      echo(chalk.cyanBright(`[INFO] Found commits between base(${baseCommit}) and head(${headCommit}): ${commits}`));
-    }
+    // if (!commits) {
+    //   echo(chalk.yellow(`No commits found  between base(${baseCommit}) and head(${headCommit})`));
+    // } else {
+    //   echo(chalk.cyanBright(`[INFO] Found commits between base(${baseCommit}) and head(${headCommit}): ${commits}`));
+    // }
 
     const commonProps = {
-      firstRelease: !latestTag,
+      firstRelease: false,
       projects: [DOCS_PROJECT_NAME],
-      base: baseCommit,
-      head: headCommit,
+      // base: baseCommit,
+      // head: headCommit,
       dryRun,
       verbose
     };

@@ -1,7 +1,7 @@
 {
 	"name": "website",
-	"root": "website",
-	"sourceRoot": "website/src",
+	"root": "apps/website",
+	"sourceRoot": "apps/website",
 	"projectType": "application",
 	"targets": {
 		"build": {

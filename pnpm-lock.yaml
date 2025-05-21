@@ -105,6 +105,40 @@ importers:
         specifier: ^8.5.3
         version: 8.5.4
 
+  apps/website:
+    dependencies:
+      '@docusaurus/core':
+        specifier: 3.7.0
+        version: 3.7.0(@mdx-js/react@3.1.0(@types/react@19.1.4)(react@19.1.0))(acorn@8.14.1)(eslint@9.27.0(jiti@2.4.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
+      '@docusaurus/preset-classic':
+        specifier: 3.7.0
+        version: 3.7.0(@algolia/client-search@5.25.0)(@mdx-js/react@3.1.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(acorn@8.14.1)(eslint@9.27.0(jiti@2.4.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)(typescript@5.8.3)
+      '@mdx-js/react':
+        specifier: ^3.0.0
+        version: 3.1.0(@types/react@19.1.4)(react@19.1.0)
+      clsx:
+        specifier: ^2.0.0
+        version: 2.1.1
+      prism-react-renderer:
+        specifier: ^2.3.0
+        version: 2.4.1(react@19.1.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.1.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.1.0(react@19.1.0)
+    devDependencies:
+      '@docusaurus/module-type-aliases':
+        specifier: 3.7.0
+        version: 3.7.0(acorn@8.14.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@docusaurus/tsconfig':
+        specifier: 3.7.0
+        version: 3.7.0
+      '@docusaurus/types':
+        specifier: 3.7.0
+        version: 3.7.0(acorn@8.14.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+
   packages/core:
     dependencies:
       '@calyjs-setup/utils':
@@ -147,40 +181,6 @@ importers:
         version: link:../../shared
 
   shared: {}
-
-  website:
-    dependencies:
-      '@docusaurus/core':
-        specifier: 3.7.0
-        version: 3.7.0(@mdx-js/react@3.1.0(@types/react@19.1.4)(react@19.1.0))(acorn@8.14.1)(eslint@9.27.0(jiti@2.4.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
-      '@docusaurus/preset-classic':
-        specifier: 3.7.0
-        version: 3.7.0(@algolia/client-search@5.25.0)(@mdx-js/react@3.1.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(acorn@8.14.1)(eslint@9.27.0(jiti@2.4.2))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(search-insights@2.17.3)(typescript@5.8.3)
-      '@mdx-js/react':
-        specifier: ^3.0.0
-        version: 3.1.0(@types/react@19.1.4)(react@19.1.0)
-      clsx:
-        specifier: ^2.0.0
-        version: 2.1.1
-      prism-react-renderer:
-        specifier: ^2.3.0
-        version: 2.4.1(react@19.1.0)
-      react:
-        specifier: ^19.0.0
-        version: 19.1.0
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.1.0(react@19.1.0)
-    devDependencies:
-      '@docusaurus/module-type-aliases':
-        specifier: 3.7.0
-        version: 3.7.0(acorn@8.14.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@docusaurus/tsconfig':
-        specifier: 3.7.0
-        version: 3.7.0
-      '@docusaurus/types':
-        specifier: 3.7.0
-        version: 3.7.0(acorn@8.14.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
 packages:
 
@@ -10127,7 +10127,7 @@ snapshots:
 
   '@types/sax@1.2.7':
     dependencies:
-      '@types/node': 17.0.45
+      '@types/node': 22.15.18
 
   '@types/send@0.17.4':
     dependencies:
