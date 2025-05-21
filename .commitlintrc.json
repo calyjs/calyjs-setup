@@ -8,7 +8,7 @@
         "ci",
         "chore",
         "docs",
-        "feature",
+        "feat",
         "fix",
         "refactor",
         "revert",
@@ -18,6 +18,7 @@
     "type-empty": [2, "never"],
     "type-case": [2, "always", ["lower-case"]],
     "scope-case": [2, "always", "lower-case"],
+    "scope-empty": [2, "never"],
     "subject-max-length": [2, "always", 72],
     "subject-empty": [2, "never"]
   },
