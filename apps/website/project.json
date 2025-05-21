@@ -13,7 +13,7 @@
 			],
       "executor": "nx:run-commands",
 			"options": {
-				"cwd": "website",
+				"cwd": "apps/website",
 				"commands": [
 					"docusaurus build"
 				],

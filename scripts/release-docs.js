@@ -106,7 +106,7 @@ async function run(projectName) {
   const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
   branchSwitch(remoteBranchExists, targetBranch, dryRun);
   const latestTag = getLatestProjectTag(projectName);
-  const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
+  const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~2').toString().trim();
   const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
   const commonProps = {
@@ -144,7 +144,7 @@ async function run(projectName) {
       gitCommit: true,
       gitTag: true,
       gitPush: true,
-      gitCommitMessage: 'chore(release): version changes'
+      gitCommitMessage: 'chore(release): changelog update'
     });
 
     echo(chalk.bgGreen.black(` Changelog generated and pushed to '${targetBranch}' branch. \n`));
