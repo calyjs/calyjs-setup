@@ -1,3 +1,7 @@
+# 3.0.0 (2025-05-21)
+
+This was a version bump only for website to align it with other projects, there were no code changes.
+
 ## 2.1.2 (2025-05-21)
 
 This was a version bump only for website to align it with other projects, there were no code changes.
