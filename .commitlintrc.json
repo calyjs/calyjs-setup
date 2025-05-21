@@ -12,7 +12,10 @@
         "fix",
         "refactor",
         "revert",
-        "style"
+        "style",
+        "perf",
+        "test",
+        "build"
       ]
     ],
     "type-empty": [2, "never"],
