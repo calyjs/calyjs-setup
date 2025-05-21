@@ -1,17 +1,17 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "defaultBase": "release",
+  "defaultBase": "master",
   "cli": {
     "packageManager": "pnpm"
   },
   "workspaceLayout": {
-    "libsDir": "packages",
-    "appsDir": "website"
+    "appsDir": "apps",
+    "libsDir": "packages"
   },
   "release": {
     "projects": [
       "packages/*",
-      "website"
+      "apps/*"
     ],
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}@{version}",
@@ -19,9 +19,14 @@
       "conventionalCommits": true
     },
     "changelog": {
-      "automaticFromRef": true,
       "projectChangelogs": {
-        "createRelease": "github"
+        "createRelease": "github",
+        "renderOptions": {
+          "authors": true,
+          "applyUsernameToAuthors": true,
+          "commitReferences": true,
+          "versionTitleDate": true
+        }
       }
     }
   },

@@ -7,141 +7,125 @@ const {
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
 const { execSync } = require('child_process');
-const DOCS_PROJECT_NAME = 'website';
 
-// Find the latest tag for the `website` project
-function getLatestProjectTag(project) {
+function runOrDryRun(dryRun, command, description) {
+  if (dryRun) {
+    echo(chalk.yellow(`[dry-run] Would run: ${command}`));
+  } else {
+    echo(chalk.gray(`→ Running: ${description}`));
+    execSync(command, { stdio: 'inherit' });
+  }
+}
+
+function getLatestProjectTag(projectName) {
   try {
+    execSync('git fetch --tags', {stdio: 'inherit'});
     const tag = execSync(
-      `git tag --list "${project}@*" --sort=-creatordate | head -n 1`,
+      `git tag --list "${projectName}@*" --sort=-creatordate | head -n 1`,
       { encoding: 'utf-8' }
     ).trim();
     if (!tag) {
-      throw new Error(`No tags found for ${project}`);
+      throw new Error(`No tags found for ${projectName}`);
     }
     return tag;
   } catch (err) {
-    echo(chalk.yellow(`[WARN] Failed to find latest tag for ${project}.`));
+    echo(chalk.yellow(`[WARN] ${err.message}.\n`));
     return null;
   }
 }
 
-// Get commit hash from a tag
-function getCommitFromTag(tag) {
-  return execSync(`git rev-list -n 1 ${tag}`, { encoding: 'utf-8' }).trim();
+function checkIfRemoteBranchExists(branchName) {
+  echo(chalk.gray(`Checking if remote branch '${branchName}' exists...\n`));
+  try {
+    const result = execSync(`git ls-remote --heads origin ${branchName}`, { encoding: 'utf8' });
+    return result.includes(`refs/heads/${branchName}`);
+  } catch {
+    return false;
+  }
 }
 
-(async () => {
-  const options = await yargs
-    .version(false)
-    .option('version', {
-      description: 'Version bump type (e.g., patch, minor, major)',
-      type: 'string',
-      default: 'prerelease',
-    })
-    .option('dryRun', {
-      description: 'Run without making changes',
-      type: 'boolean',
-      default: false,
-    })
-    .option('targetBranch', {
-      description: 'Run without making changes',
-      type: 'string',
-      default: 'release',
-    })
-    .option('verbose', {
-      description: 'Enable verbose output',
-      type: 'boolean',
-      default: false,
-    })
-    .parseAsync();
+function branchSwitch(branchExists, branchName, dryRun) {
+  try {
+    if (branchExists) {
+      echo(chalk.green(`✔ Remote branch '${branchName}' found.\n`));
+      runOrDryRun(dryRun, `git checkout ${branchName}`, `checkout ${branchName}`);
+      runOrDryRun(dryRun, `git pull origin ${branchName}`, `pull latest changes from ${branchName}`);
+      echo('\n');
+      return;
+    }
+    echo(chalk.magenta(`⚠ Remote branch '${branchName}' not found. Creating new one from origin/master.\n`));
+    runOrDryRun(dryRun, `git checkout -b ${branchName} origin/master`, `create and checkout ${branchName}`);
+    runOrDryRun(dryRun, `git push --set-upstream origin ${branchName}`, `push ${branchName} to origin`);
+    echo('\n');
+  } catch (err) {
+    echo(chalk.redBright.bold(`\n✖ Branch switch failed with following error:`));
+    echo('  ' + chalk.bgRedBright.black(` ${err.message} \n`));
+  }
+}
 
+async function run(projectName) {
+  const {dryRun, targetBranch, verbose, specifier} = await yargs.version(false)
+  .option('specifier', {
+    description: 'Specifier types (e.g., patch, minor, major, prerelease, prepatch, preminor, premajor, rc)',
+    type: 'string',
+    default: 'patch',
+  })
+  .option('dryRun', {
+    description: 'Run without making changes',
+    type: 'boolean',
+    default: false,
+  })
+  .option('targetBranch', {
+    description: 'Run without making changes',
+    type: 'string',
+    default: 'release',
+  })
+  .option('verbose', {
+    description: 'Enable verbose output',
+    type: 'boolean',
+    default: false,
+  })
+  .parseAsync();
+  
   echo(chalk.cyanBright(`
-    ┌─────────────────────────────────────────────┐
-    │                                             │
-    │   📘  ${chalk.bold('CalyJS Docs Release')}                   │
-    │   🛠️   ${chalk.gray('Script: scripts/release-docs.js')}      │
-    │                                             │
-    └─────────────────────────────────────────────┘
+    \r ┌──────────────────────────────────────────────────────────────┐
+    \r │                                                              │
+    \r │   ${chalk.bold.underline('CalyJS Documentation Release')}                               │
+    \r │                                                              │
+    \r │   ${chalk.gray('Script:')}  ${chalk.white('scripts/release-docs.js')}                           │
+    \r │   ${chalk.gray('Purpose:')} ${chalk.white('Automate versioning and changelog generation')}      │
+    \r │   ${chalk.gray('Project:')} ${chalk.white(`apps/${projectName}`)}                                      │
+    \r │                                                              │
+    \r └──────────────────────────────────────────────────────────────┘
   `));
 
-  const {dryRun, targetBranch, verbose, version} = options;
+  const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
+  branchSwitch(remoteBranchExists, targetBranch, dryRun);
+  const latestTag = getLatestProjectTag(projectName);
 
-  echo(chalk.gray(`Checking if remote branch '${targetBranch}' exists...\n`));
-  let releaseBranchExists = false;
+  const commonProps = {
+    firstRelease: !latestTag,
+    projects: [projectName],
+    dryRun,
+    verbose
+  };
 
+  echo(`${chalk.bold.cyanBright('Starting version bump using NX release API...')}\n`);
   try {
-    const result = execSync(`git ls-remote --heads origin ${targetBranch}`, { encoding: 'utf8' });
-    releaseBranchExists = result.includes(`refs/heads/${targetBranch}`);
-  } catch {
-    releaseBranchExists = false;
-  }
-
-  try {
-    if (releaseBranchExists) {
-      echo(chalk.green(`Remote branch '${targetBranch}' found. Checking out and pulling latest changes...\n`));
-      if (dryRun) {
-        echo(chalk.yellow(`[dry-run] Would checkout and pull '${targetBranch}' branch.`));
-      } else {
-        execSync(`git checkout ${targetBranch}`, { stdio: 'inherit' });
-        execSync(`git pull origin ${targetBranch}`, { stdio: 'inherit' });
-      }
-    } else {
-      echo(chalk.yellow(`Remote branch '${targetBranch}' not found. Creating new branch...\n`));
-      if (dryRun) {
-        echo(chalk.yellow(`[dry-run] Would run: git checkout -b ${targetBranch}`));
-        echo(chalk.yellow(`[dry-run] Would run: git push --set-upstream origin ${targetBranch}`));
-      } else {
-        execSync(`git checkout -b ${targetBranch} origin/master`, { stdio: 'inherit' });
-        execSync(`git push --set-upstream origin ${targetBranch}`, { stdio: 'inherit' });
-      }
-    }
-
-    execSync('git fetch --tags', {stdio: 'inherit'});
-    const latestTag = getLatestProjectTag(DOCS_PROJECT_NAME);
-    const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse origin/release~1').toString().trim();
-    const headCommit = execSync('git rev-parse HEAD').toString().trim();
-
-    echo(chalk.gray(`Using base commit: ${baseCommit}`));
-    echo(chalk.gray(`Using head commit: ${headCommit}`));
-
-    const commits = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
-      encoding: 'utf-8'
-    }).trim();
-
-    if (!commits) {
-      echo(chalk.yellow(`No commits found  between base(${baseCommit}) and head(${headCommit})`));
-    } else {
-      echo(chalk.cyanBright(`[INFO] Found commits between base(${baseCommit}) and head(${headCommit}): ${commits}`));
-    }
-
-    const commonProps = {
-      firstRelease: !latestTag,
-      projects: [DOCS_PROJECT_NAME],
-      base: baseCommit,
-      head: headCommit,
-      dryRun,
-      verbose
-    };
-
-    echo(`\n${chalk.bold.cyanBright('Starting version bump using NX release API...')}\n`);
-
-    const { projectsVersionData,  workspaceVersion } = await releaseVersion({
+    const { projectsVersionData, workspaceVersion } = await releaseVersion({
       ...commonProps,
-      stageChanges: true,
-      specifier: version,
+      specifier,
       generatorOptionsOverrides: {
         currentVersionResolver: 'git',
         fallbackCurrentVersionResolver: 'disk',
         specifierSource: 'conventional-commits',
-        updateDependents: false,
       },
+      stageChanges: false,
       gitCommit: false,
       gitTag: false,
     });
 
-    echo(chalk.bgGreen.black(`\n✔️  Version bump complete. New version: ${projectsVersionData[DOCS_PROJECT_NAME].newVersion} \n`));
-
+    echo(chalk.bgGreen.black(` Version bump complete. New version: ${projectsVersionData[projectName].newVersion} \n`));
     echo(`${chalk.bold.cyanBright('Generating changelog and finalizing release...')}\n`);
 
     await releaseChangelog({
@@ -152,29 +136,23 @@ function getCommitFromTag(tag) {
       gitCommit: true,
       gitTag: true,
       gitPush: true,
+      gitCommitMessage: 'chore(release): version changes'
     });
 
-    echo(chalk.bgGreen.black(`\n✅ Changelog generated and pushed to '${targetBranch}' branch.\n`));
-
+    echo(chalk.bgGreen.black(` Changelog generated and pushed to '${targetBranch}' branch. \n`));
     echo(chalk.cyanBright(`
-      \r ${chalk.bold('Documentation release completed successfully!\n')}
-      \r   📌 Branch:        ${targetBranch}
-      \r   📌 Version:       ${projectsVersionData[DOCS_PROJECT_NAME].newVersion}
-      \r   📌 Dry Run:       ${dryRun ? 'Yes' : 'No'}
-      \r   📌 Verbose Mode:  ${verbose ? 'Enabled' : 'Disabled'}
+      \r${chalk.bold('Documentation release completed successfully!\n')}
+      \r   ${chalk.gray('Branch:')}        ${chalk.greenBright(targetBranch)}
+      \r   ${chalk.gray('Version:')}       ${chalk.greenBright(projectsVersionData[projectName].newVersion)}
+      \r   ${chalk.gray('Dry Run:')}       ${chalk.greenBright(dryRun ? 'Yes' : 'No')}
+      \r   ${chalk.gray('Verbose Mode:')}  ${chalk.greenBright(verbose ? 'Enabled' : 'Disabled')}
     `));
-
-    echo(chalk.gray(`
-      \r ─────────────────────────────────────────────
-      \r   ✅ Done — docs release process finished.
-      \r ─────────────────────────────────────────────\n
-    `));
-    
     process.exit(0);
-
-  } catch (err) {
-    echo(chalk.redBright.bold(`\n❌ Release failed: ${err.message || err}\n`));
-    echo(chalk.gray(`Please check the logs above for more details.\n`));
+  } catch(err) {
+    echo(chalk.redBright.bold(`\n✖ Release script failed with following error:`));
+    echo('  ' + chalk.bgRedBright.black(` ${err.message} \n`));
     process.exit(1);
   }
-})();
+}
+
+run('website');

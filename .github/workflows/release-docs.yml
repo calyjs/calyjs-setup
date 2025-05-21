@@ -39,12 +39,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      RELEASE_BRANCH: release
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_PAT }}
           fetch-depth: 0
         
       - name: Setup Node.js and pnpm
@@ -69,7 +71,7 @@ jobs:
         shell: bash
 
       - name: Run NX Release script
-        run: node ./scripts/release-docs.js --verbose --version ${{ inputs.version-bump }}
+        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch $RELEASE_BRANCH
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
@@ -78,7 +80,7 @@ jobs:
         uses: ./.github/actions/create-pr
         with:
           token: ${{ secrets.GH_PAT }}
-          branch: release
+          branch: $RELEASE_BRANCH
           base: master
           title: 'chore(release): version bump'
           body: 'This PR includes version bump and changelog update.'
