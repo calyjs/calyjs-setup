@@ -20,7 +20,9 @@
     },
     "changelog": {
       "automaticFromRef": true,
-      "projectChangelogs": true
+      "projectChangelogs": {
+        "createRelease": "github"
+      }
     }
   },
   "namedInputs": {
