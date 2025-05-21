@@ -34,6 +34,10 @@ function getLatestProjectTag(projectName) {
   }
 }
 
+function getCommitFromTag(tag) {
+  return execSync(`git rev-list -n 1 ${tag}`, { encoding: 'utf-8' }).trim();
+}
+
 function checkIfRemoteBranchExists(branchName) {
   echo(chalk.gray(`Checking if remote branch '${branchName}' exists...\n`));
   try {
@@ -102,10 +106,14 @@ async function run(projectName) {
   const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
   branchSwitch(remoteBranchExists, targetBranch, dryRun);
   const latestTag = getLatestProjectTag(projectName);
+  const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-parse HEAD~1').toString().trim();
+  const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
   const commonProps = {
     firstRelease: !latestTag,
     projects: [projectName],
+    base: baseCommit,
+    head: headCommit,
     dryRun,
     verbose
   };
