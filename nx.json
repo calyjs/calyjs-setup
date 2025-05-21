@@ -5,8 +5,8 @@
     "packageManager": "pnpm"
   },
   "workspaceLayout": {
-    "libsDir": "packages",
-    "appsDir": "apps"
+    "appsDir": "apps",
+    "libsDir": "packages"
   },
   "release": {
     "projects": [
@@ -20,7 +20,13 @@
     },
     "changelog": {
       "projectChangelogs": {
-        "createRelease": "github"
+        "createRelease": "github",
+        "renderOptions": {
+          "authors": true,
+          "applyUsernameToAuthors": true,
+          "commitReferences": true,
+          "versionTitleDate": true
+        }
       }
     }
   },

@@ -128,13 +128,12 @@ function getCommitFromTag(tag) {
 
     const { projectsVersionData,  workspaceVersion } = await releaseVersion({
       ...commonProps,
-      stageChanges: true,
+      stageChanges: false,
       specifier: version,
       generatorOptionsOverrides: {
         currentVersionResolver: 'git',
         fallbackCurrentVersionResolver: 'disk',
         specifierSource: 'conventional-commits',
-        updateDependents: false,
       },
       gitCommit: false,
       gitTag: false,
@@ -152,6 +151,7 @@ function getCommitFromTag(tag) {
       gitCommit: true,
       gitTag: true,
       gitPush: true,
+      gitCommitMessage: 'chore(release): update changelog & package.json'
     });
 
     echo(chalk.bgGreen.black(`\n✅ Changelog generated and pushed to '${targetBranch}' branch.\n`));
