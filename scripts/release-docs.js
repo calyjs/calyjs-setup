@@ -21,7 +21,7 @@ function getLatestProjectTag(project) {
     }
     return tag;
   } catch (err) {
-    console.warn(`[WARN] Failed to find latest tag for ${project}.`);
+    echo(chalk.yellow(`[WARN] Failed to find latest tag for ${project}.`));
     return null;
   }
 }
