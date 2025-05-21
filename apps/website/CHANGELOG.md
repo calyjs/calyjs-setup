@@ -1,3 +1,13 @@
+## 3.0.3 (2025-05-21)
+
+### 🚀 Features
+
+- **website:** second try to reword docu tutorial ([#54](https://github.com/calyjs/calyjs-setup/pull/54), [#123](https://github.com/calyjs/calyjs-setup/issues/123), [#45](https://github.com/calyjs/calyjs-setup/issues/45))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 3.0.2 (2025-05-21)
 
 ### 🚀 Features
