@@ -23,24 +23,74 @@ concurrency:
 
 jobs:
   default-branch-check:
-    name: "Branch Name check"
     runs-on: ubuntu-latest
+    outputs:
+      should-continue: ${{ steps.check-branch.outputs.should-continue }}
     steps:
-      - if: github.ref_name != 'master'
+      - name: Check if trigger branch matches default branch
+        id: check-branch
         run: |
-          echo "Unable to release version for branch $GITHUB_REF"
-          exit 1
-      - name: "Branch Name check passed"
-        run: exit 0
-  
+          set -euo pipefail
+          
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          echo "Checking branch name: $BRANCH"
+          if [[ "$BRANCH" == "master" ]]; then
+            echo "Trigger branch is $BRANCH. Continue with Nx affected check..."
+            echo "should-continue=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping Docs release: trigger branch does not default branch"
+            echo "should-continue=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  affected-check:
+    runs-on: ubuntu-latest
+    needs: default-branch-check
+    if: needs.default-branch-check.outputs.should-continue == 'true'
+    outputs:
+      should-release: ${{ steps.check-affected.outputs.should-release }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+      
+      - name: Check if Website app is affected
+        id: check-affected
+        run: |
+          set -euo pipefail
+
+          LAST_TAG=$(git tag --list "website@*" --sort=-creatordate | head -n 1 || true)
+          if [[ -n "$LAST_TAG" ]]; then
+            echo "Using latest tag for website: $LAST_TAG"
+            BASE=$(git rev-list -n 1 "$LAST_TAG")
+          else
+            echo "No tag found for website. Using initial commit as base."
+            BASE=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
+
+          AFFECTED=$(pnpm nx show projects --affected --base="$BASE" --head="$HEAD")
+          echo "Affected projects: $AFFECTED"
+
+          if [[ "$AFFECTED" != *"website"* ]]; then
+            echo "Website not affected. Skipping release."
+            echo "should-release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Website affected. Proceeding with release..."
+            echo "should-release=true" >> "$GITHUB_OUTPUT"
+          fi
+
   release:
     name: "Release Docs website version"
-    needs: default-branch-check
+    needs: affected-check
+    if: needs.affected-check.outputs.should-release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      RELEASE_BRANCH: release
     steps:
 
       - name: Checkout repository
@@ -51,18 +101,6 @@ jobs:
         
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
-
-      - name: Check if website is affected
-        run: |
-          AFFECTED=$(pnpm nx show projects --affected --base='origin/master~1' --head=${{ github.sha }})
-          echo "Affected projects: $AFFECTED"
-          if [[ "$AFFECTED" != *"website"* ]]; then
-            echo "Website not affected. Skipping deploy."
-            exit 1
-          else
-            echo "Website affected. Continue with deploy release process..."
-            exit 0
-          fi
         
       - name: Configure Git
         run: |
@@ -71,7 +109,7 @@ jobs:
         shell: bash
 
       - name: Run NX Release script
-        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch $RELEASE_BRANCH
+        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch ${{ vars.RELEASE_BRANCH_NAME }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
@@ -80,7 +118,7 @@ jobs:
         uses: ./.github/actions/create-pr
         with:
           token: ${{ secrets.GH_PAT }}
-          branch: $RELEASE_BRANCH
+          branch: ${{ vars.RELEASE_BRANCH_NAME }}
           base: master
           title: 'chore(release): version bump'
           body: 'This PR includes version bump and changelog update.'
