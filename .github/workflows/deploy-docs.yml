@@ -7,6 +7,7 @@ on:
 
 jobs:
   validate-tag:
+    name: Tag validation check
     runs-on: ubuntu-latest
     outputs:
       should-deploy: ${{ steps.check-tag.outputs.should-deploy }}
@@ -24,7 +25,7 @@ jobs:
           fi
 
   deploy:
-    name: Deploy Docusaurus Website
+    name: Deploy Docusaurus website
     needs: validate-tag
     if: needs.validate-tag.outputs.should-deploy == 'true'
     runs-on: ubuntu-latest
