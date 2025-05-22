@@ -39,8 +39,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    env:
-      RELEASE_BRANCH: release
     steps:
 
       - name: Checkout repository
@@ -71,7 +69,8 @@ jobs:
         shell: bash
 
       - name: Run NX Release script
-        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch $RELEASE_BRANCH
+        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch ${{ vars.RELEASE_BRANCH_NAME }}
+ 
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
@@ -80,7 +79,7 @@ jobs:
         uses: ./.github/actions/create-pr
         with:
           token: ${{ secrets.GH_PAT }}
-          branch: $RELEASE_BRANCH
+          branch: ${{ vars.RELEASE_BRANCH_NAME }}
           base: master
           title: 'chore(release): version bump'
           body: 'This PR includes version bump and changelog update.'
