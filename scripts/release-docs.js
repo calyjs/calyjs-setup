@@ -8,11 +8,22 @@ const yargs = require('yargs');
 const { chalk, echo } = require('zx');
 const { execSync } = require('child_process');
 
+// Script variables
+const PROJECT_NAME = 'website';
+const ORG_NAME = 'CalyJS';
+const WHITE_SPACE = '';
+
 function runOrDryRun(dryRun, command, description) {
   if (dryRun) {
-    echo(chalk.yellow(`[dry-run] Would run: ${command}`));
+    echo(
+      chalk.bgYellow.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.yellow(` [dry-run] Would run: ${command}`)
+    );
   } else {
-    echo(chalk.gray(`→ Running: ${description}`));
+    echo(
+      chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.white(` → Running: ${description}`)
+    );
     execSync(command, { stdio: 'inherit' });
   }
 }
@@ -29,7 +40,7 @@ function getLatestProjectTag(projectName) {
     }
     return tag;
   } catch (err) {
-    echo(chalk.yellow(`[WARN] ${err.message}.\n`));
+    echo(chalk.yellow(` ⚠ ${err.message}.\n`));
     return null;
   }
 }
@@ -39,7 +50,6 @@ function getCommitFromTag(tag) {
 }
 
 function checkIfRemoteBranchExists(branchName) {
-  echo(chalk.gray(`Checking if remote branch '${branchName}' exists...\n`));
   try {
     const result = execSync(`git ls-remote --heads origin ${branchName}`, { encoding: 'utf8' });
     return result.includes(`refs/heads/${branchName}`);
@@ -51,19 +61,34 @@ function checkIfRemoteBranchExists(branchName) {
 function branchSwitch(branchExists, branchName, dryRun) {
   try {
     if (branchExists) {
-      echo(chalk.green(`✔ Remote branch '${branchName}' found.\n`));
+      echo(
+        chalk.bgGreen.bold(` ${ORG_NAME.toUpperCase()} `) +
+        chalk.greenBright(' ✔ Remote branch ') +
+        chalk.magentaBright.bold(`'${branchName}'`) +
+        chalk.greenBright(' found.\n')
+      );
       runOrDryRun(dryRun, `git checkout ${branchName}`, `checkout ${branchName}`);
       runOrDryRun(dryRun, `git pull origin ${branchName}`, `pull latest changes from ${branchName}`);
-      echo('\n');
+      echo(WHITE_SPACE);
       return;
     }
-    echo(chalk.magenta(`⚠ Remote branch '${branchName}' not found. Creating new one from origin/master.\n`));
+    echo(
+      chalk.bgMagenta.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.magenta(' ⚠ Remote branch ') +
+      chalk.cyan.bold(`'${branchName}'`) +
+      chalk.magenta(' not found. Creating new one from ') +
+      chalk.cyan.bold(`'master'.\n`)
+    );
     runOrDryRun(dryRun, `git checkout -b ${branchName} origin/master`, `create and checkout ${branchName}`);
     runOrDryRun(dryRun, `git push --set-upstream origin ${branchName}`, `push ${branchName} to origin`);
-    echo('\n');
+    echo(WHITE_SPACE);
   } catch (err) {
-    echo(chalk.redBright.bold(`\n✖ Branch switch failed with following error:`));
-    echo('  ' + chalk.bgRedBright.black(` ${err.message} \n`));
+    echo(
+      chalk.bgRed.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.red(' ✖ Remote branch switch failed with following error →') +
+      chalk.cyan.bold(` ${err.message} \n`)
+    );
+    process.exit(1);
   }
 }
 
@@ -94,7 +119,7 @@ async function run(projectName) {
   echo(chalk.cyanBright(`
     \r ┌──────────────────────────────────────────────────────────────┐
     \r │                                                              │
-    \r │   ${chalk.bold.underline('CalyJS Documentation Release')}                               │
+    \r │   ${chalk.bold.underline(`${ORG_NAME} Documentation Release`)}                               │
     \r │                                                              │
     \r │   ${chalk.gray('Script:')}  ${chalk.white('scripts/release-docs.js')}                           │
     \r │   ${chalk.gray('Purpose:')} ${chalk.white('Automate versioning and changelog generation')}      │
@@ -103,23 +128,48 @@ async function run(projectName) {
     \r └──────────────────────────────────────────────────────────────┘
   `));
 
+  echo(
+    chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.cyanBright(` Validate if remote branch `) +
+    chalk.magenta.bold(`'${targetBranch}'`) +
+    chalk.cyanBright(` exists...\n`)
+  );
   const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
   branchSwitch(remoteBranchExists, targetBranch, dryRun);
+
+  echo(
+    chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.cyanBright(` Retrieve latest tag avaiable for project `) +
+    chalk.magenta.bold(`'${projectName}'.`)
+  );
   const latestTag = getLatestProjectTag(projectName);
   const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-list --max-parents=0 HEAD').toString().trim();
   const headCommit = execSync('git rev-parse HEAD').toString().trim();
 
-  echo(chalk.gray(`Using base commit: ${baseCommit}`));
-  echo(chalk.gray(`Using head commit: ${headCommit}`));
-
-  const commits = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
+  echo(
+    chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.white(' → Using base commit: ') +
+    chalk.cyan.bold(` ${baseCommit}`)
+  );
+  echo(
+    chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.white(' → Using head commit: ') +
+    chalk.cyan.bold(` ${headCommit}`)
+  );
+  echo(
+    chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.white(' → Commits between HEAD and BASE: \n')
+  );
+  const commitsBetween = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
     encoding: 'utf-8'
-  }).trim();
-
-  if (!commits) {
-    echo(chalk.yellow(`No commits found  between base(${baseCommit}) and head(${headCommit})`));
+  });
+  if (!commitsBetween) {
+    echo(
+      chalk.bgYellow.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.yellow(' ⚠ No commits found between HEAD and BASE.\n')
+    );
   } else {
-    echo(chalk.cyanBright(`[INFO] Found commits between base(${baseCommit}) and head(${headCommit}): ${commits}`));
+    echo(`${chalk.magenta(commitsBetween)}\n`);
   }
 
   const commonProps = {
@@ -131,7 +181,10 @@ async function run(projectName) {
     verbose
   };
 
-  echo(`${chalk.bold.cyanBright('Starting version bump using NX release API...')}\n`);
+  echo(
+    chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+    chalk.cyanBright(' Starting version bump using NX release API...\n')
+  );
   try {
     const { projectsVersionData, workspaceVersion } = await releaseVersion({
       ...commonProps,
@@ -146,8 +199,15 @@ async function run(projectName) {
       gitTag: false,
     });
 
-    echo(chalk.bgGreen.black(` Version bump complete. New version: ${projectsVersionData[projectName].newVersion} \n`));
-    echo(`${chalk.bold.cyanBright('Generating changelog and finalizing release...')}\n`);
+    echo(
+      chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.cyanBright(' Version bump complete. New version: ') +
+      chalk.magenta.bold(`'${projectsVersionData[projectName].newVersion}'\n`)
+    );
+    echo(
+      chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.cyanBright(' Generating changelog and finalizing release...\n')
+    );
 
     await releaseChangelog({
       ...commonProps,
@@ -160,20 +220,31 @@ async function run(projectName) {
       gitCommitMessage: 'chore(release): changelog update'
     });
 
-    echo(chalk.bgGreen.black(` Changelog generated and pushed to '${targetBranch}' branch. \n`));
+    echo(
+      chalk.bgGreen.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.greenBright(' ✔ Changelog generated and pushed to ') +
+      chalk.magentaBright(`'${targetBranch}'`) +
+      chalk.greenBright(' branch.\n')
+    );
+    echo(
+      chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.cyanBright(' Documentation release completed successfully!')
+    );
     echo(chalk.cyanBright(`
-      \r${chalk.bold('Documentation release completed successfully!\n')}
-      \r   ${chalk.gray('Branch:')}        ${chalk.greenBright(targetBranch)}
-      \r   ${chalk.gray('Version:')}       ${chalk.greenBright(projectsVersionData[projectName].newVersion)}
-      \r   ${chalk.gray('Dry Run:')}       ${chalk.greenBright(dryRun ? 'Yes' : 'No')}
-      \r   ${chalk.gray('Verbose Mode:')}  ${chalk.greenBright(verbose ? 'Enabled' : 'Disabled')}
+      \r ${chalk.gray('Branch:')}        ${chalk.greenBright(targetBranch)}
+      \r ${chalk.gray('Version:')}       ${chalk.greenBright(projectsVersionData[projectName].newVersion)}
+      \r ${chalk.gray('Dry Run:')}       ${chalk.greenBright(dryRun ? 'Yes' : 'No')}
+      \r ${chalk.gray('Verbose Mode:')}  ${chalk.greenBright(verbose ? 'Enabled' : 'Disabled')}
     `));
     process.exit(0);
   } catch(err) {
-    echo(chalk.redBright.bold(`\n✖ Release script failed with following error:`));
-    echo('  ' + chalk.bgRedBright.black(` ${err.message} \n`));
+    echo(
+      chalk.bgRed.bold(` ${ORG_NAME.toUpperCase()} `) +
+      chalk.red(' ✖ Release script failed with following error →') +
+      chalk.cyan.bold(` ${err.message} \n`)
+    );
     process.exit(1);
   }
 }
 
-run('website');
+run(PROJECT_NAME);
