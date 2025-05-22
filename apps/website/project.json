@@ -3,6 +3,12 @@
 	"root": "apps/website",
 	"sourceRoot": "apps/website/src",
 	"projectType": "application",
+	"namedInputs": {
+		"default": [
+			"{projectRoot}/**/*",
+			"!{projectRoot}/changelog.md"
+		]
+	},
 	"targets": {
 		"build": {
 			"dependsOn": [

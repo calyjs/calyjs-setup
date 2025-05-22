@@ -70,12 +70,5 @@
       ],
       "cache": true
     }
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "options": {
-        "useInferencePlugins": false
-      }
-    }
   }
 }
