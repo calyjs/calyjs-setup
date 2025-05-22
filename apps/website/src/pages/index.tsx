@@ -8,6 +8,7 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+// add comment
 function HomepageHeader() {
 	const { siteConfig } = useDocusaurusContext();
 	return (
@@ -26,7 +27,7 @@ function HomepageHeader() {
 		</header>
 	);
 }
-
+// add comment
 export default function Home(): ReactNode {
 	const { siteConfig } = useDocusaurusContext();
 	return (
