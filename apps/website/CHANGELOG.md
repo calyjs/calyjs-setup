@@ -1,3 +1,17 @@
+## 3.0.5 (2025-05-22)
+
+### 🚀 Features
+
+- **website:** update comments ([4ee5558](https://github.com/calyjs/calyjs-setup/commit/4ee5558))
+
+### 🩹 Fixes
+
+- **website:** add comment ([e344f07](https://github.com/calyjs/calyjs-setup/commit/e344f07))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 3.0.4 (2025-05-21)
 
 ### 🚀 Features
