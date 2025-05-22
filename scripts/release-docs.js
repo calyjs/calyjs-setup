@@ -140,7 +140,7 @@ async function run(projectName) {
   echo(
     chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
     chalk.cyanBright(` Retrieve latest tag avaiable for project `) +
-    chalk.magenta.bold(`'${projectName}'.`)
+    chalk.magenta.bold(`'${projectName}'.\n`)
   );
   const latestTag = getLatestProjectTag(projectName);
   const baseCommit = !!latestTag ? getCommitFromTag(latestTag) : execSync('git rev-list --max-parents=0 HEAD').toString().trim();
@@ -169,7 +169,7 @@ async function run(projectName) {
       chalk.yellow(' ⚠ No commits found between HEAD and BASE.\n')
     );
   } else {
-    echo(`${chalk.magenta(commitsBetween)}\n`);
+    echo(`${chalk.magenta(commitsBetween)}`);
   }
 
   const commonProps = {
@@ -201,7 +201,7 @@ async function run(projectName) {
 
     echo(
       chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
-      chalk.cyanBright(' Version bump complete. New version: ') +
+      chalk.cyanBright(' Version bump completed with new version: ') +
       chalk.magenta.bold(`'${projectsVersionData[projectName].newVersion}'\n`)
     );
     echo(
