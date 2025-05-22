@@ -1,29 +1,8 @@
 {
 	"name": "website",
 	"root": "apps/website",
-	"sourceRoot": "apps/website",
+	"sourceRoot": "apps/website/src",
 	"projectType": "application",
-  "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*",
-      "!{projectRoot}/dist/**",
-      "!{projectRoot}/node_modules/**",
-      "!{projectRoot}/out-tsc/**",
-      "!{projectRoot}/coverage/**",
-      "!{projectRoot}/CHANGELOG.md",
-      "!{projectRoot}/README.md"
-    ],
-    "production": [
-      "{projectRoot}/src/**",
-      "{projectRoot}/package.json",
-      "{projectRoot}/tsconfig.json",
-      "{projectRoot}/tsconfig.*.json",
-      "{projectRoot}/.babelrc.*",
-      "{projectRoot}/api-extractor.json",
-      "{projectRoot}/api-extractor.*.json",
-      "{projectRoot}/rollup.config.*"
-    ]
-  },
 	"targets": {
 		"build": {
 			"dependsOn": [
