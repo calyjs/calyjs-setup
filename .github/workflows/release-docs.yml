@@ -23,19 +23,26 @@ concurrency:
 
 jobs:
   default-branch-check:
-    name: "Branch Name check"
     runs-on: ubuntu-latest
+    outputs:
+      should-release: ${{ steps.check-branch.outputs.should-release }}
     steps:
-      - if: github.ref_name != 'master'
+      - name: Check if trigger branch matches default branch
+        id: check-branch
         run: |
-          echo "Unable to release version for branch $GITHUB_REF"
-          exit 1
-      - name: "Branch Name check passed"
-        run: exit 0
-  
+          BRANCH="${{ github.ref_name }}"
+          echo "Checking branch name: $BRANCH"
+          if [[ "$BRANCH" == "master" ]]; then
+            echo "should-release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Skipping release: trigger branch does not default branch"
+            echo "should-release=false" >> "$GITHUB_OUTPUT"
+          fi
+
   release:
     name: "Release Docs website version"
     needs: default-branch-check
+    if: needs.default-branch-check.outputs.should-release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
