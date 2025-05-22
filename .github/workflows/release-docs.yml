@@ -30,7 +30,7 @@ jobs:
       - name: Check if trigger branch matches default branch
         id: check-branch
         run: |
-          BRANCH="${{ github.ref_name }}"
+          BRANCH="${GITHUB_REF#refs/heads/}"
           echo "Checking branch name: $BRANCH"
           if [[ "$BRANCH" == "master" ]]; then
             echo "should-release=true" >> "$GITHUB_OUTPUT"
