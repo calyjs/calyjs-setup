@@ -3,12 +3,6 @@
 	"root": "apps/website",
 	"sourceRoot": "apps/website/src",
 	"projectType": "application",
-	"namedInputs": {
-		"default": [
-			"{projectRoot}/**/*",
-			"!{projectRoot}/changelog.md"
-		]
-	},
 	"targets": {
 		"build": {
 			"dependsOn": [
@@ -25,7 +19,10 @@
 				],
 				"parallel": false
 			},
-			"inputs": ["default"],
+			"inputs": [
+				"default",
+				"production"
+			],
   		"outputs": [
 				"{projectRoot}/i18n",
 				"{projectRoot}/build"
