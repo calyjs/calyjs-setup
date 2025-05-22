@@ -40,7 +40,7 @@
 				],
 				"parallel": false
 			},
-			"inputs": ["production"],
+			"inputs": ["default"],
   		"outputs": [
 				"{projectRoot}/i18n",
 				"{projectRoot}/build"
