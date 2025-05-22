@@ -1,7 +1,7 @@
 {
 	"name": "website",
 	"root": "apps/website",
-	"sourceRoot": "apps/website",
+	"sourceRoot": "apps/website/src",
 	"projectType": "application",
 	"targets": {
 		"build": {
@@ -19,7 +19,10 @@
 				],
 				"parallel": false
 			},
-			"inputs": ["production"],
+			"inputs": [
+				"default",
+				"production"
+			],
   		"outputs": [
 				"{projectRoot}/i18n",
 				"{projectRoot}/build"

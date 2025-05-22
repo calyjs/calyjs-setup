@@ -35,14 +35,19 @@
       "{projectRoot}/**/*",
       "!{projectRoot}/dist/**",
       "!{projectRoot}/out-tsc/**",
-			"!{projectRoot}/*.md"
+      "!{projectRoot}/coverage/**",
+      "!{projectRoot}/CHANGELOG.md",
+      "!{projectRoot}/README.md",
+			"!{projectRoot}/**/*.md"
     ],
     "production": [
       "{projectRoot}/src/**",
-      "{projectRoot}/.babelrc.mjs",
+      "{projectRoot}/.babelrc.*",
+      "{projectRoot}/rollup.config.*",
       "{projectRoot}/api-extractor.json",
-      "{projectRoot}/rollup.config.mjs",
-      "{projectRoot}/tsconfig.json"
+      "{projectRoot}/api-extractor.*.json",
+      "{projectRoot}/tsconfig.json",
+      "{projectRoot}/tsconfig.*.json"
     ]
   },
   "targetDefaults": {

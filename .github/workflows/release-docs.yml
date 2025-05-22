@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   default-branch-check:
+    name: "Default branch check"
     runs-on: ubuntu-latest
     outputs:
       should-continue: ${{ steps.check-branch.outputs.should-continue }}
@@ -43,6 +44,7 @@ jobs:
           fi
 
   affected-check:
+    name: "Docs website changes check"
     runs-on: ubuntu-latest
     needs: default-branch-check
     if: needs.default-branch-check.outputs.should-continue == 'true'
@@ -73,7 +75,19 @@ jobs:
 
           HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
 
-          AFFECTED=$(pnpm nx show projects --affected --base="$BASE" --head="$HEAD")
+          echo "Getting changed files from $BASE to $HEAD"
+          CHANGED_FILES=$(git diff --name-only "$BASE" "$HEAD" | grep -vE 'CHANGELOG\.md$' || true)
+
+          if [[ -z "$CHANGED_FILES" ]]; then
+            echo "No relevant changes detected."
+            echo "should-release=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Comma-separated files for --files input
+          FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)
+
+          AFFECTED=$(pnpm nx show projects --affected --files="$FILES")
           echo "Affected projects: $AFFECTED"
 
           if [[ "$AFFECTED" != *"website"* ]]; then
@@ -92,7 +106,6 @@ jobs:
     permissions:
       contents: write
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
