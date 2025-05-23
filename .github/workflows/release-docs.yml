@@ -39,7 +39,7 @@ jobs:
             echo "Trigger branch is $BRANCH. Continue with Nx affected check..."
             echo "should-continue=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Skipping Docs release: trigger branch is not default"
+            echo "::warning::Skipping Docs release: trigger branch is not default"
             echo "should-continue=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -79,7 +79,7 @@ jobs:
           echo "Affected projects: $AFFECTED"
 
           if [[ "$AFFECTED" != *"website"* ]]; then
-            echo "Website not affected. Skipping release."
+            echo "::warning::Website not affected. Skipping release."
             echo "should-release=false" >> "$GITHUB_OUTPUT"
           else
             echo "Website affected. Proceeding with release..."
