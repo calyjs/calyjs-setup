@@ -70,12 +70,6 @@
         "build"
       ],
       "cache": true
-    },
-    "release": {
-      "inputs": [
-        "default",
-        "production"
-      ]
     }
   }
 }
