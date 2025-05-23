@@ -61,6 +61,10 @@
     "apps/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "scripts/**/*.{js,jsx,ts,tsx,mjs,mts,cjs,cts}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "author": {

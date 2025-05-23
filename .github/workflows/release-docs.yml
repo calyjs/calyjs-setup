@@ -30,12 +30,14 @@ jobs:
     steps:
       - name: Check if trigger branch matches default branch
         id: check-branch
+        env:
+          DEFAULT_BRANCH_NAME: ${{ vars.DEFAULT_BRANCH_NAME }}
         run: |
           set -euo pipefail
           
           BRANCH="${GITHUB_REF#refs/heads/}"
           echo "Checking branch name: $BRANCH"
-          if [[ "$BRANCH" == "master" ]]; then
+          if [[ "$BRANCH" == "$DEFAULT_BRANCH_NAME" ]]; then
             echo "Trigger branch is $BRANCH. Continue with Nx affected check..."
             echo "should-continue=true" >> "$GITHUB_OUTPUT"
           else
@@ -99,7 +101,11 @@ jobs:
         shell: bash
 
       - name: Run NX Release script
-        run: pnpm run release:docs -- --specifier ${{ inputs.version-bump }} --target-branch ${{ vars.RELEASE_BRANCH_NAME }}
+        run: |
+          pnpm run release:docs \
+            -- --specifier ${{ inputs.version-bump }} \
+            --target-branch ${{ vars.RELEASE_BRANCH_NAME }} \
+            --base-branch ${{ vars.DEFAULT_BRANCH_NAME }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
@@ -109,7 +115,7 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
           branch: ${{ vars.RELEASE_BRANCH_NAME }}
-          base: master
+          base: ${{ vars.DEFAULT_BRANCH_NAME }}
           title: 'chore(release): add release changes'
           body: 'This PR includes version bump and changelog updates.'
           commit-message: 'chore(release): add release changes'
