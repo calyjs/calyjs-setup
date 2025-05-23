@@ -2,3 +2,6 @@
 **/CHANGELOG.md
 **/README.md
 **/*.md
+
+# NPM Package JSON
+**/package.json
