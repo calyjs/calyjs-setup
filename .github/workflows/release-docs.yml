@@ -64,18 +64,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          LAST_TAG=$(git tag --list "website@*" --sort=-creatordate | head -n 1 || true)
-          if [[ -n "$LAST_TAG" ]]; then
-            echo "Using latest tag for website: $LAST_TAG"
-            BASE=$(git rev-list -n 1 "$LAST_TAG")
-          else
-            echo "No tag found for website. Using initial commit as base."
-            BASE=$(git rev-list --max-parents=0 HEAD)
-          fi
-
-          HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
-
-          AFFECTED=$(pnpm nx show projects --affected --base="$BASE" --head="$HEAD")
+          AFFECTED=$(pnpm nx show projects --affected)
           echo "Affected projects: $AFFECTED"
 
           if [[ "$AFFECTED" != *"website"* ]]; then
@@ -121,6 +110,6 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           branch: ${{ vars.RELEASE_BRANCH_NAME }}
           base: master
-          title: 'chore(release): version bump'
-          body: 'This PR includes version bump and changelog update.'
-          commit-message: 'chore(release): version bump'
+          title: 'chore(release): add release changes'
+          body: 'This PR includes version bump and changelog updates.'
+          commit-message: 'chore(release): add release changes'
