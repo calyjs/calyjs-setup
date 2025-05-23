@@ -47,7 +47,9 @@
       "{projectRoot}/api-extractor.json",
       "{projectRoot}/api-extractor.*.json",
       "{projectRoot}/tsconfig.json",
-      "{projectRoot}/tsconfig.*.json"
+      "{projectRoot}/tsconfig.*.json",
+      "!{projectRoot}/test/**",
+      "!{projectRoot}/**/__tests__/*"
     ]
   },
   "targetDefaults": {

@@ -9,14 +9,17 @@ Thank you for your interest in contributing to this project! To maintain consist
 All new work must begin from a new branch created off the latest `develop` branch.
 
 ### Accepted Branch Name Formats:
-- `feature/<short-description>` — New feature implementation
+- `feat/<short-description>` — New feature implementation
 - `fix/<short-description>` — Bug fixes
 - `chore/<short-description>` — Maintenance tasks
 - `docs/<short-description>` — Documentation updates
 - `style/<short-description>` — Code style or formatting changes
 - `refactor/<short-description>` — Code restructuring
 - `ci/<short-description>` — CI/CD pipeline or config updates
-- `revert/<commit-hash>` — Reverts to a previous state
+- `revert/<short-description>` — Reverts to a previous state
+- `build/<short-description>` — System build updates
+- `perf/<short-description>` — Performance improvements
+- `test/<short-description>` — Add/Update tests
 
 ---
 
@@ -26,20 +29,26 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0
 
 ### Use the following format:
 
+> [!IMPORTANT]  
+> The commit `scope` is **required** to improve clarity and traceability.
+
 ```
-<type>: <short description>
+<type>(<scope>): <description>
 ```
 
 ### Examples:
 
-- `fix: handle null pointer in user model`
-- `feat: add search endpoint for articles`
-- `docs: update installation guide`
-- `chore: bump dependencies`
-- `refactor: simplify date parsing logic`
-- `style: apply prettier formatting`
-- `test: add unit test for login flow`
-- `ci: update GitHub Actions node version`
+- `fix(react): handle null pointer in user model`
+- `feat(core): add search endpoint for articles`
+- `docs(root): update installation guide`
+- `chore(release): bump dependencies`
+- `refactor(utils): simplify date parsing logic`
+- `style(vue): apply prettier formatting`
+- `test(core): add unit test for login flow`
+- `ci(workflow): update GitHub Actions node version`
+- `perf(utils): improve search logic`
+- `build(root): update nx build process`
+- `revert(root): nx build update`
 
 ### Avoid:
 

@@ -22,6 +22,7 @@
     "type-case": [2, "always", ["lower-case"]],
     "scope-case": [2, "always", "lower-case"],
     "scope-empty": [2, "never"],
+    "scope-max-length": [2, "always", 15],
     "subject-max-length": [2, "always", 72],
     "subject-empty": [2, "never"]
   },
