@@ -49,20 +49,20 @@ function checkIfRemoteBranchExists(branchName) {
 	}
 }
 
-function branchSwitch(branchExists, branchName, dryRun) {
+function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 	try {
 		if (branchExists) {
 			echo(
 				chalk.bgGreen.bold(` ${ORG_NAME.toUpperCase()} `) +
 					chalk.greenBright(' ✔ Remote branch ') +
-					chalk.magentaBright.bold(`'${branchName}'`) +
+					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
-			runOrDryRun(dryRun, `git checkout ${branchName}`, `checkout ${branchName}`);
+			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
 			runOrDryRun(
 				dryRun,
-				`git pull origin ${branchName}`,
-				`pull latest changes from ${branchName}`
+				`git pull origin ${targetBranch}`,
+				`pull latest changes from ${targetBranch}`
 			);
 			echo(WHITE_SPACE);
 			return;
@@ -70,19 +70,19 @@ function branchSwitch(branchExists, branchName, dryRun) {
 		echo(
 			chalk.bgMagenta.bold(` ${ORG_NAME.toUpperCase()} `) +
 				chalk.magenta(' ⚠ Remote branch ') +
-				chalk.cyan.bold(`'${branchName}'`) +
+				chalk.cyan.bold(`'${targetBranch}'`) +
 				chalk.magenta(' not found. Creating new one from ') +
-				chalk.cyan.bold(`'master'.\n`)
+				chalk.cyan.bold(`'${baseBranch}'.\n`)
 		);
 		runOrDryRun(
 			dryRun,
-			`git checkout -b ${branchName} origin/master`,
-			`create and checkout ${branchName}`
+			`git checkout -b ${targetBranch} origin/${baseBranch}`,
+			`create and checkout ${targetBranch}`
 		);
 		runOrDryRun(
 			dryRun,
-			`git push --set-upstream origin ${branchName}`,
-			`push ${branchName} to origin`
+			`git push --set-upstream origin ${targetBranch}`,
+			`push ${targetBranch} to origin`
 		);
 		echo(WHITE_SPACE);
 	} catch (err) {
@@ -96,7 +96,7 @@ function branchSwitch(branchExists, branchName, dryRun) {
 }
 
 async function run(projectName) {
-	const { dryRun, targetBranch, verbose, specifier } = await yargs
+	const { dryRun, targetBranch, verbose, specifier, baseBranch } = await yargs
 		.version(false)
 		.option('specifier', {
 			description:
@@ -110,9 +110,14 @@ async function run(projectName) {
 			default: false,
 		})
 		.option('targetBranch', {
-			description: 'Run without making changes',
+			description: 'Branch to use for pushing changes',
 			type: 'string',
 			default: 'release',
+		})
+		.option('baseBranch', {
+			description: 'Base branch to use',
+			type: 'string',
+			default: 'master',
 		})
 		.option('verbose', {
 			description: 'Enable verbose output',
@@ -142,7 +147,7 @@ async function run(projectName) {
 			chalk.cyanBright(` exists...\n`)
 	);
 	const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
-	branchSwitch(remoteBranchExists, targetBranch, dryRun);
+	branchSwitch(remoteBranchExists, targetBranch, baseBranch, dryRun);
 
 	echo(
 		chalk.bgCyan.bold(` ${ORG_NAME.toUpperCase()} `) +
