@@ -30,16 +30,14 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0
 ### Use the following format:
 
 > [!IMPORTANT]  
-> The commit scope is **optional**, but **it must be included when modifying a specific package** in this monorepository.  
-> We recommend always defining a scope to improve clarity and traceability.
+> The commit `scope` is **required** to improve clarity and traceability.
 
 ```
-<type>(<scope?>): <description>
+<type>(<scope>): <description>
 ```
 
 ### Examples:
 
-- `revert: previous commit`
 - `fix(react): handle null pointer in user model`
 - `feat(core): add search endpoint for articles`
 - `docs(root): update installation guide`
@@ -50,6 +48,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0
 - `ci(workflow): update GitHub Actions node version`
 - `perf(utils): improve search logic`
 - `build(root): update nx build process`
+- `revert(root): nx build update`
 
 ### Avoid:
 
@@ -69,7 +68,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0
    - All tests pass (run `npm test`, `yarn test`, or equivalent).
    - You have added/updated documentation as needed.
 4. **Commit your changes** with meaningful commit messages.
-5. **Push your branch** and open a **Pull Request (PR)** targeting the `master` branch.
+5. **Push your branch** and open a **Pull Request (PR)** targeting the `develop` branch.
 
 ---
 
