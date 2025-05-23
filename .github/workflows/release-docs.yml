@@ -110,7 +110,7 @@ jobs:
         shell: bash
 
       - name: Run NX Release script
-        run: node ./scripts/release-docs.js --verbose --specifier ${{ inputs.version-bump }} --target-branch ${{ vars.RELEASE_BRANCH_NAME }}
+        run: pnpm run release:docs -- --specifier ${{ inputs.version-bump }} --target-branch ${{ vars.RELEASE_BRANCH_NAME }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
