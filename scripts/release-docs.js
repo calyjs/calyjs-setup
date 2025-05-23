@@ -40,6 +40,10 @@ function getLatestProjectTag(projectName) {
 	}
 }
 
+function getCommitFromTag(tag) {
+	return execSync(`git rev-list -n 1 ${tag}`, { encoding: 'utf-8' }).trim();
+}
+
 function checkIfRemoteBranchExists(branchName) {
 	try {
 		const result = execSync(`git ls-remote --heads origin ${branchName}`, { encoding: 'utf8' });
@@ -154,11 +158,44 @@ async function run(projectName) {
 			chalk.cyanBright(` Retrieve latest tag avaiable for project `) +
 			chalk.magenta.bold(`'${projectName}'.\n`)
 	);
+
 	const latestTag = getLatestProjectTag(projectName);
+	const baseCommit = !!latestTag
+		? getCommitFromTag(latestTag)
+		: execSync('git rev-list --max-parents=0 HEAD').toString().trim();
+	const headCommit = execSync('git rev-parse HEAD').toString().trim();
+
+	echo(
+		chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+			chalk.white(' → Using base commit: ') +
+			chalk.cyan.bold(` ${baseCommit}`)
+	);
+	echo(
+		chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+			chalk.white(' → Using head commit: ') +
+			chalk.cyan.bold(` ${headCommit}`)
+	);
+	echo(
+		chalk.bgGray.bold(` ${ORG_NAME.toUpperCase()} `) +
+			chalk.white(' → Commits between HEAD and BASE: \n')
+	);
+	const commitsBetween = execSync(`git log --oneline ${baseCommit}..${headCommit}`, {
+		encoding: 'utf-8',
+	});
+	if (!commitsBetween) {
+		echo(
+			chalk.bgYellow.bold(` ${ORG_NAME.toUpperCase()} `) +
+				chalk.yellow(' ⚠ No commits found between HEAD and BASE.\n')
+		);
+	} else {
+		echo(`${chalk.magenta(commitsBetween)}`);
+	}
 
 	const commonProps = {
 		firstRelease: !latestTag,
 		projects: [projectName],
+		base: baseCommit,
+		head: headCommit,
 		dryRun,
 		verbose,
 	};
