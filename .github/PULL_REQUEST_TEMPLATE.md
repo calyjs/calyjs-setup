@@ -12,28 +12,17 @@
 
 > Please delete options that are not relevant and mark the chosen one with an `x`.
 
-- [ ] 🐛 Bug fix (fixes an issue)  
-  > _Example: Fix crash on login when email is empty_
-- [ ] ✨ New feature (adds functionality)  
-  > _Example: Add dark mode toggle to settings page_
-- [ ] 🔧 Refactor (code improvements without behavior change)  
-  > _Example: Rename variables for clarity in AuthService_
-- [ ] 🧪 Tests (adding or updating tests)  
-  > _Example: Add unit tests for the payment processor_
-- [ ] 📚 Documentation (only changes to docs)  
-  > _Example: Update README with new setup instructions_
-- [ ] 🎨 Style (formatting, whitespace, etc.)  
-  > _Example: Format codebase with Prettier_
-- [ ] 🚀 CI/CD (changes to workflows or deployment)  
-  > _Example: Add GitHub Actions workflow for PR checks_
-- [ ] 🗑 Revert (reverting previous commits)  
-  > _Example: Revert "Add analytics integration"_
-- [ ] 🧹 Chore (project configuration or tooling tasks that don't affect application logic)  
-  > _Examples: update dependencies, rename folders, clean unused scripts, edit `.gitignore`_
-- [ ] 🧱 Build (changes affecting the build system or external dependencies)  
-  > _Examples: update `pnpm-lock.yaml`, modify `tsconfig`, adjust bundler settings_
-- [ ] ⚡️ Perf (performance improvements without behavior change)  
-  > _Examples: optimize list rendering, reduce bundle size_
+- [ ] 🐛 Bug fix (fixes an issue)
+- [ ] ✨ New feature (adds functionality)
+- [ ] 🔧 Refactor (code improvements without behavior change)
+- [ ] 🧪 Tests (adding or updating tests)
+- [ ] 📚 Documentation (only changes to docs)
+- [ ] 🎨 Style (formatting, whitespace, etc.)
+- [ ] 🚀 CI/CD (changes to workflows or deployment)
+- [ ] 🗑 Revert (reverting previous commits)
+- [ ] 🧹 Chore (project configuration or tooling tasks that don't affect application logic)
+- [ ] 🧱 Build (changes affecting the build system or external dependencies)
+- [ ] ⚡️ Perf (performance improvements without behavior change)
 
 ---
 

@@ -39,7 +39,7 @@ jobs:
             echo "Trigger branch is $BRANCH. Continue with Nx affected check..."
             echo "should-continue=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Skipping Docs release: trigger branch does not default branch"
+            echo "Skipping Docs release: trigger branch is not default"
             echo "should-continue=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -75,19 +75,7 @@ jobs:
 
           HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
 
-          echo "Getting changed files from $BASE to $HEAD"
-          CHANGED_FILES=$(git diff --name-only "$BASE" "$HEAD" | grep -vE 'CHANGELOG\.md$' || true)
-
-          if [[ -z "$CHANGED_FILES" ]]; then
-            echo "No relevant changes detected."
-            echo "should-release=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          # Comma-separated files for --files input
-          FILES=$(echo "$CHANGED_FILES" | paste -sd "," -)
-
-          AFFECTED=$(pnpm nx show projects --affected --files="$FILES")
+          AFFECTED=$(pnpm nx show projects --affected --base="$BASE" --head="$HEAD")
           echo "Affected projects: $AFFECTED"
 
           if [[ "$AFFECTED" != *"website"* ]]; then
