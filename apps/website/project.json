@@ -28,6 +28,16 @@
 				"{projectRoot}/build"
 			],
 			"cache": true
+		},
+		"deploy": {
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "apps/website",
+				"commands": [
+					"docusaurus deploy"
+				],
+				"parallel": false
+			}
 		}
 	}
 }
