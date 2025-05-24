@@ -1,3 +1,14 @@
+## 4.0.10 (2025-05-24)
+
+### 🚀 Features
+
+- **website:** update link text 3 ([76ccf0b](https://github.com/calyjs/calyjs-setup/commit/76ccf0b))
+- **website:** update link text 2 ([d9feda5](https://github.com/calyjs/calyjs-setup/commit/d9feda5))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 4.0.9 (2025-05-24)
 
 This was a version bump only for website to align it with other projects, there were no code changes.
