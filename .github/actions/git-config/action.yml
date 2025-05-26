@@ -1,0 +1,27 @@
+name: Configure Git
+description: Bot GIT configuration steps with GPG signed commits
+
+inputs:
+  gpgPrivId:
+    required: true
+    description: GitHub GPG private key for signed commits (secrets.GPG_PRIVATE_KEY)
+
+  gpgKeyId:
+    required: true
+    description: GitHub GPG key ID for signed commits (secrets.GPG_KEY_ID)
+
+runs:
+  using: "composite"
+  steps:
+    - name: Configure Git
+      env:
+        GPG_PRIVATE_KEY: ${{ inputs.gpgPrivId }}
+        GPG_KEY_ID: ${{ inputs.gpgKeyId }}
+      run: |
+        echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+
+        git config user.name "calyjs-bot"
+        git config user.email "calyjs-bot@users.noreply.github.com"
+        git config --global commit.gpgsign true
+        git config --global user.signingkey $GPG_KEY_ID
+      shell: bash

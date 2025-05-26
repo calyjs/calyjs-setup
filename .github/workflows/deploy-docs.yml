@@ -39,19 +39,12 @@ jobs:
         
       - name: Setup Node.js and pnpm
         uses: ./.github/actions/setup
-        
-      - name: Configure Git
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
 
-          git config user.name "calyjs-bot"
-          git config user.email "calyjs-bot@users.noreply.github.com"
-          git config --global commit.gpgsign true
-          git config --global user.signingkey $GPG_KEY_ID
-        shell: bash
+      - name: Configure Git
+        uses: ./.github/actions/git-config
+        with:
+          gpgPrivId: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpgKeyId: ${{ secrets.GPG_KEY_ID }}
         
       - name: Deploy to GitHub Pages
         run: pnpm nx run website:deploy
