@@ -262,7 +262,7 @@ async function run(projectName) {
 		echo(
 			chalk.bgRed.bold(` ${ORG_NAME.toUpperCase()} `) +
 				chalk.red(' ✖ Release script failed with following error →') +
-				chalk.cyan.bold(` ${err.message} \n`)
+				chalk.cyan.bold(` ${err} \n`)
 		);
 		process.exit(1);
 	}
