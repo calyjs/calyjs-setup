@@ -99,7 +99,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
         
       - name: Setup Node.js and pnpm
@@ -119,12 +119,12 @@ jobs:
             --base-branch ${{ vars.DEFAULT_BRANCH_NAME }}
         shell: bash
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Create release PR
         uses: ./.github/actions/create-pr
         with:
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GH_TOKEN }}
           branch: ${{ vars.RELEASE_BRANCH_NAME }}
           base: ${{ vars.DEFAULT_BRANCH_NAME }}
           title: 'chore(release): add release changes'

@@ -51,4 +51,4 @@ jobs:
         shell: bash
         env:
           GIT_USER: ${{ github.actor }}
-          GIT_PASS: ${{ secrets.GH_PAT }}
+          GIT_PASS: ${{ secrets.GH_TOKEN }}
