@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [master, develop]
 
-concurrency:
-  group: monorepo-ci-${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   lint:
     name: Lint Affected Projects
