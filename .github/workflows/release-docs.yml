@@ -109,6 +109,7 @@ jobs:
         run: |
           git config user.name "calyjs-bot"
           git config user.email "calyjs-bot@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
         shell: bash
 
       - name: Run NX Release script
