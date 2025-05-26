@@ -20,8 +20,8 @@ runs:
       run: |
         echo "$GPG_PRIVATE_KEY" | gpg --batch --import
 
-        git config user.name "calyjs-bot"
-        git config user.email "calyjs-bot@users.noreply.github.com"
+        git config --global user.name "calyjs-bot"
+        git config --global user.email "calyjs-bot@users.noreply.github.com"
         git config --global commit.gpgsign true
         git config --global user.signingkey $GPG_KEY_ID
       shell: bash
