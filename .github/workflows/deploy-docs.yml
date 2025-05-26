@@ -41,10 +41,14 @@ jobs:
         uses: ./.github/actions/setup
         
       - name: Configure Git
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
         run: |
           git config user.name "calyjs-bot"
           git config user.email "calyjs-bot@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
+          git config --global user.signingkey $GPG_KEY_ID
+          git config --global commit.gpgsign true
         shell: bash
         
       - name: Deploy to GitHub Pages
