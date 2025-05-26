@@ -1,3 +1,9 @@
+## 4.0.13 (2025-05-26)
+
+### 🚀 Features
+
+- **website:** update link text 6 ([#77](https://github.com/calyjs/calyjs-setup/pull/77), [#123](https://github.com/calyjs/calyjs-setup/issues/123), [#45](https://github.com/calyjs/calyjs-setup/issues/45))
+
 ## 4.0.12 (2025-05-26)
 
 ### 🚀 Features
