@@ -32,7 +32,6 @@ jobs:
     permissions:
       contents: write
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -52,4 +51,4 @@ jobs:
         shell: bash
         env:
           GIT_USER: ${{ github.actor }}
-          GIT_PASS: ${{ secrets.GITHUB_TOKEN }}
+          GIT_PASS: ${{ secrets.GH_PAT }}
