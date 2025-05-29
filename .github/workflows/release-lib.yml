@@ -64,6 +64,14 @@ jobs:
       should-release: ${{ steps.detect.outputs.should-release }}
       affected-libraries: ${{ steps.detect.outputs.affected-libraries }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Setup Node.js and pnpm
+        uses: ./.github/actions/setup
+
       - name: Detect affected libraries
         id: detect
         uses: ./.github/actions/detect-affected
