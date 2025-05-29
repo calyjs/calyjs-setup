@@ -44,7 +44,7 @@ runs:
             BASE=$(git rev-list --max-parents=0 HEAD)
           fi
 
-          AFFECTED=$(pnpm nx show projects --exclude=${{ inputs.exclude }} --base="$BASE" --head="$HEAD" | xargs)
+          AFFECTED=$(pnpm nx show projects --affected --exclude=${{ inputs.exclude }} --base="$BASE" --head="$HEAD" | xargs)
 
           if echo "$AFFECTED" | tr ' ' '\n' | grep -Fxq "$project"; then
             AFFECTED_LIBS+="$project "
