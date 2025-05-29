@@ -27,19 +27,11 @@ runs:
         set -euo pipefail
 
         MODE="${{ inputs.mode }}"
-        EXCLUDE="${{ inputs.exclude }}"
-
-        IFS=',' read -ra EXCLUDE_ARRAY <<< "$EXCLUDE"
-        EXCLUDE_FLAGS=""
-        for e in "${EXCLUDE_ARRAY[@]}"; do
-          EXCLUDE_FLAGS+="--exclude=$e "
-        done
-
         HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
         AFFECTED_LIBS=""
 
         if [[ "$MODE" == "affected" ]]; then
-          mapfile -t PROJECTS < <(pnpm nx show projects $EXCLUDE_FLAGS | xargs -n1)
+          mapfile -t PROJECTS < <(pnpm nx show projects --exclude=${{ inputs.exclude }} | xargs -n1)
         else
           PROJECTS=("$MODE")
         fi
@@ -52,7 +44,7 @@ runs:
             BASE=$(git rev-list --max-parents=0 HEAD)
           fi
 
-          AFFECTED=$(pnpm nx show projects $EXCLUDE_FLAGS --base="$BASE" --head="$HEAD" | xargs)
+          AFFECTED=$(pnpm nx show projects --exclude=${{ inputs.exclude }} --base="$BASE" --head="$HEAD" | xargs)
 
           if echo "$AFFECTED" | tr ' ' '\n' | grep -Fxq "$project"; then
             AFFECTED_LIBS+="$project "
