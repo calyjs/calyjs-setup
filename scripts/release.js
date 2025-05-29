@@ -159,7 +159,7 @@ async function run() {
 
 	if (projects.length === 0) {
 		echo(banner('bgYellow') + chalk.yellow(' ✖ No projects to be released at this moment.'));
-		process.exit(0);
+		process.exit(1);
 	}
 
 	echo(
