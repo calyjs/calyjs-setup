@@ -215,7 +215,7 @@ async function run() {
 				},
 				stageChanges: true,
 				gitCommit: true,
-				gitCommitMessage: `chore(release): update version for ${projectName} project`,
+				gitCommitMessage: `chore(release): ${projectName} version bump`,
 				gitTag: false,
 			});
 
@@ -231,7 +231,7 @@ async function run() {
 				gitCommit: true,
 				gitTag: true,
 				gitPush: true,
-				gitCommitMessage: `chore(release): changelog update for ${projectName} project`,
+				gitCommitMessage: `chore(release): update ${projectName} changelog`,
 			});
 
 			echo(
