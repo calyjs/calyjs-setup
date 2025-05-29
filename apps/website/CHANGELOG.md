@@ -1,3 +1,13 @@
+## 4.0.19 (2025-05-29)
+
+### 🚀 Features
+
+- **website:** update button link text 12 ([5c7369c](https://github.com/calyjs/calyjs-setup/commit/5c7369c))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 4.0.18 (2025-05-27)
 
 ### 🚀 Features
