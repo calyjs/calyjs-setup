@@ -11,8 +11,8 @@
     "build": "nx run-many --target build",
     "test": "nx run-many --target test",
     "lint": "nx run-many --target lint",
-    "release:docs": "node ./scripts/release-docs.js --verbose",
-    "release:docs:mock": "node ./scripts/release-docs.js --verbose --specifier major --target-branch master --dry-run",
+    "release": "node ./scripts/release.js --verbose",
+    "release:mock": "node ./scripts/release.js --verbose --specifier major --target-branch master --dry-run --projects core utils",
     "prepare": "husky"
   },
   "devDependencies": {
