@@ -114,7 +114,7 @@ jobs:
       - name: Run NX Release script
         run: |
           pnpm run release \
-            -- --specifier ${{ inputs.version-bump }} \
+            --specifier ${{ inputs.version-bump }} \
             --target-branch ${{ vars.RELEASE_BRANCH_NAME }} \
             --base-branch ${{ vars.DEFAULT_BRANCH_NAME }} \
             --projects website
