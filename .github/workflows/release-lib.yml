@@ -1,8 +1,18 @@
-name: Create Docs release tag
+name: Create Library release tag
 
 on:
   workflow_dispatch:
     inputs:
+      library:
+        type: choice
+        description: 'Select the library you want to release'
+        required: true
+        default: 'core'
+        options:
+          - core
+          - utils
+          - react
+          - affected
       version-bump:
         type: choice
         description: 'Select the version bump to perform.'
@@ -18,7 +28,7 @@ on:
           - prerelease
 
 concurrency:
-  group: release-docs-${{ github.workflow }}-${{ github.ref_name }}
+  group: release-lib-${{ github.workflow }}-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -45,53 +55,25 @@ jobs:
             echo "should-continue=false" >> "$GITHUB_OUTPUT"
           fi
 
-  affected-check:
-    name: "Docs website changes check"
-    runs-on: ubuntu-latest
+  detect-affected:
+    name: Detect affected libraries
     needs: default-branch-check
     if: needs.default-branch-check.outputs.should-continue == 'true'
+    runs-on: ubuntu-latest
     outputs:
-      should-release: ${{ steps.check-affected.outputs.should-release }}
+      should-release: ${{ steps.detect.outputs.should-release }}
+      affected-libraries: ${{ steps.detect.outputs.affected-libraries }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Detect affected libraries
+        id: detect
+        uses: ./.github/actions/detect-affected
         with:
-          fetch-depth: 0
-        
-      - name: Setup Node.js and pnpm
-        uses: ./.github/actions/setup
-      
-      - name: Check if Website app is affected
-        id: check-affected
-        run: |
-          set -euo pipefail
-
-          LAST_TAG=$(git tag --list "website@*" --sort=-creatordate | head -n 1 || true)
-          if [[ -n "$LAST_TAG" ]]; then
-            echo "Using latest tag for website: $LAST_TAG"
-            BASE=$(git rev-list -n 1 "$LAST_TAG")
-          else
-            echo "No tag found for website. Using initial commit as base."
-            BASE=$(git rev-list --max-parents=0 HEAD)
-          fi
-
-          HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
-
-          AFFECTED=$(pnpm nx show projects --affected --exclude=shared --base="$BASE" --head="$HEAD" | xargs)
-          echo "Affected projects: $AFFECTED"
-
-          if echo "$AFFECTED" | tr ' ' '\n' | grep -Fxq "website"; then
-            echo "Website affected. Proceeding with release..."
-            echo "should-release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Website not affected. Skipping release."
-            echo "should-release=false" >> "$GITHUB_OUTPUT"
-          fi
+          mode: ${{ inputs.library }}
 
   release:
-    name: "Release Docs website version"
-    needs: affected-check
-    if: needs.affected-check.outputs.should-release == 'true'
+    name: "Release library ${{ inputs.library }} version"
+    needs: detect-affected
+    if: needs.detect-affected.outputs.should-release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -117,7 +99,7 @@ jobs:
             --specifier ${{ inputs.version-bump }} \
             --target-branch ${{ vars.RELEASE_BRANCH_NAME }} \
             --base-branch ${{ vars.DEFAULT_BRANCH_NAME }} \
-            --projects website
+            --projects ${{ needs.detect-affected.outputs.affected-libraries }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

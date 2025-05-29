@@ -1,0 +1,79 @@
+name: Detect affected libraries
+
+inputs:
+  mode:
+    description: 'Either a specific library name or "affected"'
+    required: true
+  exclude:
+    description: 'Comma-separated list of projects to exclude'
+    required: false
+    default: 'shared,website'
+
+outputs:
+  should-release:
+    description: 'Whether at least one library should be released'
+    value: ${{ steps.detect.outputs.should-release }}
+  affected-libraries:
+    description: 'List of affected libraries (space-separated)'
+    value: ${{ steps.detect.outputs.affected-libraries }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js and pnpm
+      uses: ./.github/actions/setup
+
+    - name: Detect affected projects
+      id: detect
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        MODE="${{ inputs.mode }}"
+        EXCLUDE="${{ inputs.exclude }}"
+
+        IFS=',' read -ra EXCLUDE_ARRAY <<< "$EXCLUDE"
+        EXCLUDE_FLAGS=""
+        for e in "${EXCLUDE_ARRAY[@]}"; do
+          EXCLUDE_FLAGS+="--exclude=$e "
+        done
+
+        HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
+        AFFECTED_LIBS=""
+
+        if [[ "$MODE" == "affected" ]]; then
+          mapfile -t PROJECTS < <(pnpm nx show projects $EXCLUDE_FLAGS | xargs -n1)
+        else
+          PROJECTS=("$MODE")
+        fi
+
+        for project in "${PROJECTS[@]}"; do
+          LAST_TAG=$(git tag --list "${project}@*" --sort=-creatordate | head -n 1 || true)
+          if [[ -n "$LAST_TAG" ]]; then
+            BASE=$(git rev-list -n 1 "$LAST_TAG")
+          else
+            BASE=$(git rev-list --max-parents=0 HEAD)
+          fi
+
+          AFFECTED=$(pnpm nx show projects $EXCLUDE_FLAGS --base="$BASE" --head="$HEAD" | xargs)
+
+          if echo "$AFFECTED" | tr ' ' '\n' | grep -Fxq "$project"; then
+            AFFECTED_LIBS+="$project "
+          fi
+        done
+
+        AFFECTED_LIBS=$(echo "$AFFECTED_LIBS" | xargs)
+
+        if [[ -z "$AFFECTED_LIBS" ]]; then
+          echo "::warning::No affected libraries found. Skipping release."
+          echo "should-release=false" >> "$GITHUB_OUTPUT"
+        else
+          echo "Affected libraries: $AFFECTED_LIBS"
+          echo "should-release=true" >> "$GITHUB_OUTPUT"
+          echo "affected-libraries=$AFFECTED_LIBS" >> "$GITHUB_OUTPUT"
+        fi
