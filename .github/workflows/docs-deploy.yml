@@ -1,4 +1,4 @@
-name: Deploy Docs to GitHub Pages
+name: Deploy Website Docs to GitHub Pages 
 
 on:
   push:
@@ -7,12 +7,12 @@ on:
 
 jobs:
   validate-tag:
-    name: Tag validation check
+    name: Validate Tag Pattern
     runs-on: ubuntu-latest
     outputs:
       should-deploy: ${{ steps.check-tag.outputs.should-deploy }}
     steps:
-      - name: Check if tag matches website@<semver>
+      - name: Check if tag pattern matches website@<semver>
         id: check-tag
         run: |
           TAG="${{ github.ref_name }}"
@@ -32,21 +32,21 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout repository code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
         
-      - name: Setup Node.js and pnpm
+      - name: Setup Node & pnpm environment
         uses: ./.github/actions/setup
 
-      - name: Configure Git
+      - name: Configure Git user and GPG signing
         uses: ./.github/actions/git-config
         with:
           gpgPrivId: ${{ secrets.GPG_PRIVATE_KEY }}
           gpgKeyId: ${{ secrets.GPG_KEY_ID }}
         
-      - name: Deploy to GitHub Pages
+      - name: Deploy Website to GitHub Pages
         run: pnpm nx run website:deploy
         shell: bash
         env:

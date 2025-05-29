@@ -1,4 +1,4 @@
-name: Create Docs release tag
+name: Release Docs Website (Manual)
 
 on:
   workflow_dispatch:
@@ -22,13 +22,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  default-branch-check:
-    name: "Default branch check"
+  validate-default-branch:
+    name: Validate Default Branch
     runs-on: ubuntu-latest
     outputs:
       should-continue: ${{ steps.check-branch.outputs.should-continue }}
     steps:
-      - name: Check if trigger branch matches default branch
+      - name: Check if current branch is the default branch
         id: check-branch
         env:
           DEFAULT_BRANCH_NAME: ${{ vars.DEFAULT_BRANCH_NAME }}
@@ -45,84 +45,65 @@ jobs:
             echo "should-continue=false" >> "$GITHUB_OUTPUT"
           fi
 
-  affected-check:
-    name: "Docs website changes check"
+  analyze-affected-libraries:
+    name: Analyze Affected Libraries
+    needs: validate-default-branch
     runs-on: ubuntu-latest
-    needs: default-branch-check
-    if: needs.default-branch-check.outputs.should-continue == 'true'
+    if: needs.validate-default-branch.outputs.should-continue == 'true'
     outputs:
-      should-release: ${{ steps.check-affected.outputs.should-release }}
+      should-release: ${{ steps.detect.outputs.should-release }}
+      affected-libraries: ${{ steps.detect.outputs.affected-libraries }}
     steps:
-      - name: Checkout repository
+      - name: Checkout repository code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
         
-      - name: Setup Node.js and pnpm
+      - name: Setup Node & pnpm environment
         uses: ./.github/actions/setup
       
-      - name: Check if Website app is affected
-        id: check-affected
-        run: |
-          set -euo pipefail
+      - name: Run Nx affected detection logic
+        id: detect
+        uses: ./.github/actions/detect-affected
+        with:
+          mode: 'website'
+          exclude: 'shared'
 
-          LAST_TAG=$(git tag --list "website@*" --sort=-creatordate | head -n 1 || true)
-          if [[ -n "$LAST_TAG" ]]; then
-            echo "Using latest tag for website: $LAST_TAG"
-            BASE=$(git rev-list -n 1 "$LAST_TAG")
-          else
-            echo "No tag found for website. Using initial commit as base."
-            BASE=$(git rev-list --max-parents=0 HEAD)
-          fi
-
-          HEAD=${GITHUB_SHA:-$(git rev-parse HEAD)}
-
-          AFFECTED=$(pnpm nx show projects --affected --exclude=shared --base="$BASE" --head="$HEAD" | xargs)
-          echo "Affected projects: $AFFECTED"
-
-          if echo "$AFFECTED" | tr ' ' '\n' | grep -Fxq "website"; then
-            echo "Website affected. Proceeding with release..."
-            echo "should-release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Website not affected. Skipping release."
-            echo "should-release=false" >> "$GITHUB_OUTPUT"
-          fi
-
-  release:
+  create-release-tag:
     name: "Release Docs website version"
-    needs: affected-check
-    if: needs.affected-check.outputs.should-release == 'true'
+    needs: analyze-affected-libraries
+    if: needs.analyze-affected-libraries.outputs.should-release == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout repository code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GH_TOKEN }}
           fetch-depth: 0
         
-      - name: Setup Node.js and pnpm
+      - name: Setup Node & pnpm environment
         uses: ./.github/actions/setup
 
-      - name: Configure Git
+      - name: Configure Git user and GPG signing
         uses: ./.github/actions/git-config
         with:
           gpgPrivId: ${{ secrets.GPG_PRIVATE_KEY }}
           gpgKeyId: ${{ secrets.GPG_KEY_ID }}
 
-      - name: Run NX Release script
+      - name: Execute custom Nx release script
         run: |
           pnpm run release \
             --specifier ${{ inputs.version-bump }} \
             --target-branch ${{ vars.RELEASE_BRANCH_NAME }} \
             --base-branch ${{ vars.DEFAULT_BRANCH_NAME }} \
-            --projects website
+            --projects ${{ needs.analyze-affected-libraries.outputs.affected-libraries }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Create release PR
+      - name: Create Pull Request with release version updates
         uses: ./.github/actions/create-pr
         with:
           token: ${{ secrets.GH_TOKEN }}
