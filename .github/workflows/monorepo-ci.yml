@@ -1,10 +1,10 @@
-name: Lint, Test & Build Affected Projects (CI)
+name: Lint, Test & Build Projects (CI)
 
 on:
   push:
     branches: [master]
   pull_request:
-    branches: [master]
+    branches: [master, develop]
 
 concurrency:
   group: monorepo-ci-${{ github.workflow }}-${{ github.ref }}
@@ -12,11 +12,8 @@ concurrency:
 
 jobs:
   lint:
-    name: Lint Affected Projects
+    name: Lint Projects
     runs-on: ubuntu-latest
-    env:
-      BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-      HEAD: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
@@ -26,18 +23,14 @@ jobs:
       - name: Setup Node & pnpm environment
         uses: ./.github/actions/setup
 
-      - name: Run lint on affected projects
-        run: pnpm nx affected:lint --base=$BASE --head=$HEAD
+      - name: Run lint on all projects
+        run: pnpm run lint
         shell: bash
 
   test:
-    name: Test Affected Projects
+    name: Test Projects
     runs-on: ubuntu-latest
-    env:
-      BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
-      HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
-
       - name: Checkout repository code
         uses: actions/checkout@v4
         with:
@@ -47,17 +40,13 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run tests on affected projects
-        run: pnpm nx affected:test --base=$BASE --head=$HEAD
+        run: pnpm run test
         shell: bash
   
   build:
-    name: Build Affected Projects
+    name: Build Projects
     runs-on: ubuntu-latest
-    env:
-      BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
-      HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
-
       - name: Checkout repository code
         uses: actions/checkout@v4
         with:
@@ -67,5 +56,5 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run build on affected projects
-        run: pnpm nx affected:build --base=$BASE --head=$HEAD
+        run: pnpm run build
         shell: bash
