@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     if: needs.validate-default-branch.outputs.should-continue == 'true'
     outputs:
-      should-release: ${{ steps.detect.outputs.should-release }}
+      should-release: ${{ steps.detect.outputs.should-continue }}
       affected-libraries: ${{ steps.detect.outputs.affected-libraries }}
     steps:
       - name: Checkout repository code

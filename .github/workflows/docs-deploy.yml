@@ -10,7 +10,7 @@ jobs:
     name: Validate Tag Pattern
     runs-on: ubuntu-latest
     outputs:
-      should-deploy: ${{ steps.validate.outputs.should-deploy }}
+      should-deploy: ${{ steps.validate.outputs.should-continue }}
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4

@@ -10,11 +10,11 @@ inputs:
     default: 'shared,website'
 
 outputs:
-  should-release:
-    description: 'Whether at least one library should be released'
-    value: ${{ steps.detect.outputs.should-release }}
+  should-continue:
+    description: Whether the workflow should continue or not
+    value: ${{ steps.detect.outputs.should-continue }}
   affected-libraries:
-    description: 'List of affected libraries (space-separated)'
+    description: List of affected libraries (space-separated)
     value: ${{ steps.detect.outputs.affected-libraries }}
 
 runs:
@@ -55,9 +55,9 @@ runs:
 
         if [[ -z "$AFFECTED_LIBS" ]]; then
           echo "::warning::No affected libraries found. Skipping release."
-          echo "should-release=false" >> "$GITHUB_OUTPUT"
+          echo "should-continue=false" >> "$GITHUB_OUTPUT"
         else
           echo "Affected libraries: $AFFECTED_LIBS"
-          echo "should-release=true" >> "$GITHUB_OUTPUT"
+          echo "should-continue=true" >> "$GITHUB_OUTPUT"
           echo "affected-libraries=$AFFECTED_LIBS" >> "$GITHUB_OUTPUT"
         fi

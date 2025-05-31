@@ -2,9 +2,9 @@ name: Validate Tag Pattern
 description: Validates if the GitHub tag matches <project>@<semver> pattern
 
 outputs:
-  should-deploy:
-    description: Whether the tag is valid and deployment should proceed
-    value: ${{ steps.validate.outputs.should-deploy }}
+  should-continue:
+    description: Whether the workflow should continue or not
+    value: ${{ steps.validate.outputs.should-continue }}
 
 runs:
   using: composite
@@ -19,8 +19,8 @@ runs:
         # Regex: lowercase letters, numbers, hyphens, then @, then x.y.z
         if [[ "$TAG" =~ ^[a-z0-9\-]+@[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           echo "Tag $TAG matches pattern: <project>@<semver>"
-          echo "should-deploy=true" >> "$GITHUB_OUTPUT"
+          echo "should-continue=true" >> "$GITHUB_OUTPUT"
         else
           echo "::warning::Skipping deployment: tag does not match required pattern (<project>@x.y.z)."
-          echo "should-deploy=false" >> "$GITHUB_OUTPUT"
+          echo "should-continue=false" >> "$GITHUB_OUTPUT"
         fi
