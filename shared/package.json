@@ -12,7 +12,8 @@
   "module": "dist/src/index.mjs",
   "types": "dist/src/index.d.mts",
   "scripts": {
-    "build": "nx run shared:build",
+    "build": "tsc -b",
+    "clean": "rimraf dist",
     "postinstall": "pnpm run build"
   },
   "bin": {
