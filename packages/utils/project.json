@@ -18,6 +18,7 @@
 			"dependsOn": ["clean"],
       "executor": "nx:run-commands",
 			"options": {
+				"runInBand": true,
 				"cwd": "packages/utils",
 				"commands": [
 					"jest --coverage"
@@ -72,6 +73,10 @@
 				],
 				"parallel": false
 			}
-		}
+		},
+    "nx-release-publish": {
+      "executor": "@nx/js:release-publish",
+      "options": {}
+    }
 	}
 }

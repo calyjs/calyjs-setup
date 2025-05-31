@@ -1,0 +1,53 @@
+name: Publish Library to NPM
+
+on:
+  push:
+    tags:
+      - '*@*'
+    tags-ignore:
+      - 'website@*'
+
+jobs:
+  validate-tag:
+    name: Validate Tag Pattern
+    runs-on: ubuntu-latest
+    outputs:
+      should-publish: ${{ steps.validate.outputs.should-deploy }}
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Validate tag format
+        id: validate
+        uses: ./.github/actions/validate-tag
+
+  publish:
+    name: Deploy Docusaurus website
+    needs: validate-tag
+    if: needs.validate-tag.outputs.should-publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Setup Node & pnpm environment
+        uses: ./.github/actions/setup
+
+      - name: Configure Git user and GPG signing
+        uses: ./.github/actions/git-config
+        with:
+          gpgPrivId: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpgKeyId: ${{ secrets.GPG_KEY_ID }}
+
+      - name: Publish ${{ github.ref_name }} to NPM
+        run: pnpm run publish --tag=${{ github.ref_name }}
+        shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
