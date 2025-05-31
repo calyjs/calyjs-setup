@@ -8,7 +8,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - id: check-tag
+    - id: validate
       shell: bash
       run: |
         TAG="${GITHUB_REF_NAME:-${GITHUB_REF##*/}}"
