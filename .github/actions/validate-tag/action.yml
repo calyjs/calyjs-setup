@@ -4,9 +4,10 @@ description: Validates if the GitHub tag matches <project>@<semver> pattern
 outputs:
   should-deploy:
     description: Whether the tag is valid and deployment should proceed
+    value: ${{ steps.validate.outputs.should-deploy }}
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: validate
       shell: bash
