@@ -10,19 +10,11 @@ jobs:
     name: Validate Tag Pattern
     runs-on: ubuntu-latest
     outputs:
-      should-deploy: ${{ steps.check-tag.outputs.should-deploy }}
+      should-deploy: ${{ steps.validate.outputs.should-deploy }}
     steps:
-      - name: Check if tag pattern matches website@<semver>
-        id: check-tag
-        run: |
-          TAG="${{ github.ref_name }}"
-          echo "Checking tag: $TAG"
-          if [[ "$TAG" =~ ^website@[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "should-deploy=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Skipping deployment: tag does not match required semver pattern (website@x.y.z)."
-            echo "should-deploy=false" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Validate tag format
+        id: validate
+        uses: ./.github/actions/validate-tag
 
   deploy:
     name: Deploy Docusaurus website

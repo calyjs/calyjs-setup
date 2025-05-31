@@ -36,24 +36,13 @@ jobs:
     name: Validate Default Branch
     runs-on: ubuntu-latest
     outputs:
-      should-continue: ${{ steps.check-branch.outputs.should-continue }}
+      should-continue: ${{ steps.branch-check.outputs.should-continue }}
     steps:
-      - name: Check if current branch is the default branch
-        id: check-branch
-        env:
-          DEFAULT_BRANCH_NAME: ${{ vars.DEFAULT_BRANCH_NAME }}
-        run: |
-          set -euo pipefail
-          
-          BRANCH="${GITHUB_REF#refs/heads/}"
-          echo "Checking branch name: $BRANCH"
-          if [[ "$BRANCH" == "$DEFAULT_BRANCH_NAME" ]]; then
-            echo "Trigger branch is $BRANCH. Continue with Nx affected check..."
-            echo "should-continue=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::Skipping Docs release: trigger branch is not default"
-            echo "should-continue=false" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Check if current branch is default
+        id: branch-check
+        uses: ./.github/actions/default-branch
+        with:
+          default-branch: ${{ vars.DEFAULT_BRANCH_NAME }}
 
   analyze-affected-libraries:
     name: Analyze Affected Libraries

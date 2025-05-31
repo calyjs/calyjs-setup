@@ -1,0 +1,25 @@
+name: Validate Tag Pattern
+description: Validates if the GitHub tag matches <project>@<semver> pattern
+
+outputs:
+  should-deploy:
+    description: Whether the tag is valid and deployment should proceed
+
+runs:
+  using: "composite"
+  steps:
+    - id: check-tag
+      shell: bash
+      run: |
+        TAG="${GITHUB_REF_NAME:-${GITHUB_REF##*/}}"
+
+        echo "Checking tag: $TAG"
+
+        # Regex: lowercase letters, numbers, hyphens, then @, then x.y.z
+        if [[ "$TAG" =~ ^[a-z0-9\-]+@[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo "Tag $TAG matches pattern: <project>@<semver>"
+          echo "should-deploy=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "::warning::Skipping deployment: tag does not match required pattern (<project>@x.y.z)."
+          echo "should-deploy=false" >> "$GITHUB_OUTPUT"
+        fi

@@ -1,0 +1,29 @@
+name: Validate Default Branch
+description: Checks if the current branch is the default one
+
+inputs:
+  default-branch:
+    description: Name of the default branch to compare against
+    required: true
+
+outputs:
+  should-continue:
+    description: Whether the workflow should continue based on branch check
+
+runs:
+  using: "composite"
+  steps:
+    - id: check-branch
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        BRANCH="${GITHUB_REF#refs/heads/}"
+        echo "Checking branch name: $BRANCH"
+        if [[ "$BRANCH" == "${{ inputs.default-branch }}" ]]; then
+          echo "Trigger branch is $BRANCH. Continue with workflow..."
+          echo "should-continue=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "::warning::Skipping: trigger branch is not default"
+          echo "should-continue=false" >> "$GITHUB_OUTPUT"
+        fi
