@@ -38,6 +38,11 @@ jobs:
     outputs:
       should-continue: ${{ steps.branch-check.outputs.should-continue }}
     steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
       - name: Check if current branch is default
         id: branch-check
         uses: ./.github/actions/default-branch

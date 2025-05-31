@@ -12,6 +12,11 @@ jobs:
     outputs:
       should-deploy: ${{ steps.validate.outputs.should-deploy }}
     steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
       - name: Validate tag format
         id: validate
         uses: ./.github/actions/validate-tag
