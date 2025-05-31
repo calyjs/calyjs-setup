@@ -1,0 +1,34 @@
+{
+	"name": "shared",
+	"root": "shared",
+	"sourceRoot": "shared/src",
+	"projectType": "library",
+	"targets": {
+		"clean": {
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "shared",
+				"commands": [
+					"rimraf dist"
+				],
+				"parallel": false
+			}
+		},
+		"build": {
+			"dependsOn": ["clean"],
+      "executor": "nx:run-commands",
+			"options": {
+				"cwd": "shared",
+				"commands": [
+					"tsc -b"
+				],
+				"parallel": false
+			},
+			"inputs": ["production"],
+  		"outputs": [
+				"{projectRoot}/dist"
+			],
+			"cache": true
+		}
+	}
+}

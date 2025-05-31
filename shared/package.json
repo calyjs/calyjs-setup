@@ -12,9 +12,7 @@
   "module": "dist/src/index.mjs",
   "types": "dist/src/index.d.mts",
   "scripts": {
-    "build": "tsc -b",
-    "clean": "rimraf dist",
-    "preinstall": "pnpm run clean",
+    "build": "nx run shared:build",
     "postinstall": "pnpm run build"
   },
   "bin": {
