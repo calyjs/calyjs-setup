@@ -9,9 +9,10 @@ inputs:
 outputs:
   should-continue:
     description: Whether the workflow should continue based on branch check
+    value: ${{ steps.branch-check.outputs.should-continue }}
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - id: branch-check
       shell: bash
