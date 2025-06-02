@@ -92,9 +92,9 @@ async function run() {
 			const { projectsVersionData, workspaceVersion } = await releaseVersion({
 				...commonProps,
 				specifier,
+				fallbackCurrentVersionResolver: 'disk',
 				generatorOptionsOverrides: {
 					currentVersionResolver: 'git',
-					fallbackCurrentVersionResolver: 'disk',
 					specifierSource: 'conventional-commits',
 				},
 				stageChanges: true,
