@@ -51,6 +51,8 @@ function checkIfRemoteBranchExists(branchName) {
 
 function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 	try {
+		runOrDryRun(dryRun, 'git fetch --all --depth=0', 'fetch full git history');
+
 		if (branchExists) {
 			echo(
 				banner('bgGreen') +
@@ -58,18 +60,24 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
+
+			// Checkout release branch
 			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
+
+			// Ensure base branch is available locally
 			runOrDryRun(
 				dryRun,
-				`git pull origin ${targetBranch}`,
-				`pull latest changes from ${targetBranch}`
+				`git fetch origin ${baseBranch}:${baseBranch}`,
+				`fetch base branch ${baseBranch}`
 			);
+
+			// Merge base branch into release with custom commit message
 			runOrDryRun(
 				dryRun,
-				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}" --no-verify`,
-				`merge latest changes from ${baseBranch} into ${targetBranch} with custom commit message`
+				`git merge --no-edit --no-ff ${baseBranch} -m "chore(merge): pull ${baseBranch} into ${targetBranch}"`,
+				`merge ${baseBranch} into ${targetBranch}`
 			);
-			runOrDryRun(dryRun, `git push origin ${targetBranch}`, `push ${targetBranch} to origin`);
+
 			return;
 		}
 		echo(
