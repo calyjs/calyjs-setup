@@ -16,7 +16,7 @@ function runOrDryRun(dryRun, command, description) {
 
 function getLatestProjectTag(projectName) {
 	try {
-		execSync('git fetch --tags', { stdio: 'inherit' });
+		execSync('git fetch --tags --force', { stdio: 'inherit' });
 		const tag = execSync(`git tag --list "${projectName}@*" --sort=-creatordate | head -n 1`, {
 			encoding: 'utf-8',
 		}).trim();
