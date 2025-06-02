@@ -1,3 +1,13 @@
+## 0.1.3 (2025-06-02)
+
+### 🚀 Features
+
+- **core:** update isEmpty function ([acdfe5d](https://github.com/calyjs/calyjs-setup/commit/acdfe5d))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.2 (2025-06-02)
 
 ### 🚀 Features
