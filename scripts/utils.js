@@ -63,11 +63,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
 
 			// Ensure base branch is available locally
-			runOrDryRun(
-				dryRun,
-				`git fetch origin ${baseBranch}:${baseBranch}`,
-				`fetch base branch ${baseBranch}`
-			);
+			runOrDryRun(dryRun, `git fetch origin ${baseBranch}`, `fetch base branch ${baseBranch}`);
 
 			// Merge base branch into release with custom commit message
 			runOrDryRun(
