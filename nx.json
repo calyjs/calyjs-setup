@@ -15,6 +15,9 @@
     ],
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}@{version}",
+    "version": {
+      "conventionalCommits": true
+    },
     "changelog": {
       "projectChangelogs": {
         "createRelease": "github",
