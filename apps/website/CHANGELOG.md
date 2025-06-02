@@ -1,3 +1,15 @@
+## 4.0.23 (2025-06-02)
+
+### 🚀 Features
+
+- **website:** updated link text 17 ([7955221](https://github.com/calyjs/calyjs-setup/commit/7955221))
+- **core:** remove isNumber function ([ba20050](https://github.com/calyjs/calyjs-setup/commit/ba20050))
+- **core:** add isNumber function ([5269a56](https://github.com/calyjs/calyjs-setup/commit/5269a56))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 4.0.22 (2025-05-31)
 
 ### 🚀 Features
