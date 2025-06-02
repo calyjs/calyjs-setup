@@ -16,10 +16,23 @@ function runOrDryRun(dryRun, command, description) {
 
 function getLatestProjectTag(projectName) {
 	try {
+		// Query NPM registry to show available versions and dist-tags for the given project
+		// This is mostly informative (for visibility/logs) but if it fails,
+		// (404) error exception will be thrown and return null (which is expected).
+		execSync(
+			`npm view @calyjs-setup/${projectName} versions dist-tags --registry=https://registry.npmjs.org/`,
+			{ stdio: 'inherit' }
+		);
+
+		// Force-fetch all tags from the remote Git repository to ensure we have the latest tags
 		execSync('git fetch --tags --force', { stdio: 'inherit' });
+
+		// Get the most recent Git tag for the specified project, sorted by creation date
+		// Format is expected to be like: core@1.2.3, utils@0.5.0, etc.
 		const tag = execSync(`git tag --list "${projectName}@*" --sort=-creatordate | head -n 1`, {
 			encoding: 'utf-8',
 		}).trim();
+
 		if (!tag) {
 			throw new Error(`No tags found for ${projectName}`);
 		}
@@ -125,3 +138,5 @@ module.exports = {
 	banner,
 	branchSwitch,
 };
+
+getLatestProjectTag('core');
