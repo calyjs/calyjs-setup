@@ -51,7 +51,7 @@ function checkIfRemoteBranchExists(branchName) {
 
 function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 	try {
-		runOrDryRun(dryRun, 'git fetch --all --depth=0', 'fetch full git history');
+		runOrDryRun(dryRun, 'git fetch --all && git fetch --unshallow', 'fetch full git history');
 
 		if (branchExists) {
 			echo(
