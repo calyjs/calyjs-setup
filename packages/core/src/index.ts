@@ -2,4 +2,8 @@ function isEmpty(value: unknown): boolean {
 	return typeof value === 'undefined' || value === null;
 }
 
-export { isEmpty };
+function isNumber(value: unknown): value is number {
+	return typeof value !== 'undefined' && value !== null && isNumber(value);
+}
+
+export { isEmpty, isNumber };
