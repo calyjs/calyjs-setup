@@ -16,14 +16,6 @@ function runOrDryRun(dryRun, command, description) {
 
 function getLatestProjectTag(projectName) {
 	try {
-		// Query NPM registry to show available versions and dist-tags for the given project
-		// This is mostly informative (for visibility/logs) but if it fails,
-		// (404) error exception will be thrown and return null (which is expected).
-		execSync(
-			`npm view @calyjs-setup/${projectName} versions dist-tags --registry=https://registry.npmjs.org/`,
-			{ stdio: 'inherit' }
-		);
-
 		// Force-fetch all tags from the remote Git repository to ensure we have the latest tags
 		execSync('git fetch --tags --force', { stdio: 'inherit' });
 
