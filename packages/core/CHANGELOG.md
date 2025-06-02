@@ -1,13 +1,3 @@
-## 0.0.3 (2025-05-31)
-
-### 🚀 Features
-
-- **core:** remove isNumber function ([133160d](https://github.com/calyjs/calyjs-setup/commit/133160d))
-
-### ❤️ Thank You
-
-- rocmaz
-
 ## 0.0.2 (2025-05-31)
 
 ### 🚀 Features
