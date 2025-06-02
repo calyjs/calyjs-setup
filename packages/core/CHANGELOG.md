@@ -1,3 +1,13 @@
+## 0.1.2 (2025-06-02)
+
+### 🚀 Features
+
+- **core:** remove iSrOP function ([cdd2f75](https://github.com/calyjs/calyjs-setup/commit/cdd2f75))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.1 (2025-06-02)
 
 ### 🚀 Features
