@@ -92,6 +92,11 @@ async function run() {
 			const { projectsVersionData, workspaceVersion } = await releaseVersion({
 				...commonProps,
 				specifier,
+				generatorOptionsOverrides: {
+					currentVersionResolver: 'git',
+					fallbackCurrentVersionResolver: 'disk',
+					specifierSource: 'conventional-commits',
+				},
 				stageChanges: true,
 				gitCommit: true,
 				gitCommitMessage: `chore(release): ${projectName} version bump`,
