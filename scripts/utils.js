@@ -63,6 +63,11 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 				`git pull origin ${targetBranch}`,
 				`pull latest changes from ${targetBranch}`
 			);
+			runOrDryRun(
+				dryRun,
+				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}"`,
+				`merge latest changes from ${baseBranch} into ${targetBranch} with custom commit message`
+			);
 			return;
 		}
 		echo(
