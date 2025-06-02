@@ -28,6 +28,7 @@ function getLatestProjectTag(projectName) {
 		if (!tag) {
 			throw new Error(`No tags found for ${projectName}`);
 		}
+		echo(banner() + chalk.cyan(` → Found latest tag ${tag}`));
 		return tag;
 	} catch (err) {
 		echo(chalk.yellow(` ⚠ ${err.message}.\n`));
