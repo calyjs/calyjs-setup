@@ -6,4 +6,8 @@ function isNumber(value: unknown): value is number {
 	return typeof value !== 'undefined' && value !== null && isNumber(value);
 }
 
-export { isEmpty, isNumber };
+function isTest(value: unknown): value is number {
+	return typeof value !== 'undefined' && value !== null && isNumber(value);
+}
+
+export { isEmpty, isNumber, isTest };
