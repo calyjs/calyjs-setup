@@ -28,6 +28,7 @@ function getLatestProjectTag(projectName) {
 		if (!tag) {
 			throw new Error(`No tags found for ${projectName}`);
 		}
+		echo(banner() + chalk.cyan(` → Found latest tag ${tag}`));
 		return tag;
 	} catch (err) {
 		echo(chalk.yellow(` ⚠ ${err.message}.\n`));
@@ -65,9 +66,10 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 			runOrDryRun(
 				dryRun,
-				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}"`,
+				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}" --no-verify`,
 				`merge latest changes from ${baseBranch} into ${targetBranch} with custom commit message`
 			);
+			runOrDryRun(dryRun, `git push origin ${targetBranch}`, `push ${targetBranch} to origin`);
 			return;
 		}
 		echo(
@@ -135,5 +137,3 @@ module.exports = {
 	banner,
 	branchSwitch,
 };
-
-getLatestProjectTag('core');
