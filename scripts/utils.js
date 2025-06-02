@@ -65,7 +65,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 			runOrDryRun(
 				dryRun,
-				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}"`,
+				`git merge --no-ff origin/${baseBranch} -m "chore(merge): pull ${baseBranch} changes into ${targetBranch}" --no-verify`,
 				`merge latest changes from ${baseBranch} into ${targetBranch} with custom commit message`
 			);
 			return;
