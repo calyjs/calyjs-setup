@@ -2,10 +2,8 @@ name: Publish Library to NPM
 
 on:
   push:
-    tags:
-      - 'core@*'
-      - 'react@*'
-      - 'utils@*'
+    tags-ignore:
+      - 'website@*'
 
 jobs:
   validate-tag:
