@@ -2,7 +2,7 @@
 	"name": "@calyjs-setup/core",
 	"description": "Core JavaScript library to create flexible, easy-to-integrate date-time components.",
 	"packageManager": "pnpm@10.10.0",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"sideEffects": false,
 	"publishConfig": {
 		"access": "public"
