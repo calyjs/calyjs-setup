@@ -66,7 +66,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			// Checkout release branch
 			runOrDryRun(
 				dryRun,
-				`git checkout -b ${targetBranch} origin/${baseBranch}`,
+				`git checkout -b ${targetBranch} origin/${targetBranch}`,
 				`checkout existing ${targetBranch} branch`
 			);
 
