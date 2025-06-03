@@ -69,6 +69,9 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 				`fetch base branch ${baseBranch}`
 			);
 
+			// Ensure all tags are available
+			runOrDryRun(dryRun, `git fetch --tags --force`, 'fetch all tags');
+
 			// Merge base branch into release with custom commit message
 			runOrDryRun(
 				dryRun,
