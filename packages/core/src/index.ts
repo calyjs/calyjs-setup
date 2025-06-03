@@ -5,4 +5,11 @@ function isEmpty(value: unknown): boolean {
 	return typeof value === 'undefined' || value === null;
 }
 
-export { isEmpty };
+function getString(): string {
+	if (__DEV__) {
+		console.warn('----- Development mode ------');
+	}
+	return 'string';
+}
+
+export { isEmpty, getString };
