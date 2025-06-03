@@ -16,9 +16,6 @@ function runOrDryRun(dryRun, command, description) {
 
 function getLatestProjectTag(projectName) {
 	try {
-		// Force-fetch all tags from the remote Git repository to ensure we have the latest tags
-		execSync('git fetch --tags --force', { stdio: 'inherit' });
-
 		// Get the most recent Git tag for the specified project, sorted by creation date
 		// Format is expected to be like: core@1.2.3, utils@0.5.0, etc.
 		const tag = execSync(`git tag --list "${projectName}@*" --sort=-creatordate | head -n 1`, {
@@ -60,25 +57,17 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 
 			// Checkout release branch
-			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
-
-			// Ensure base branch is available locally
 			runOrDryRun(
 				dryRun,
-				`git fetch origin ${baseBranch}:${baseBranch}`,
-				`fetch base branch ${baseBranch}`
+				`git checkout -b ${targetBranch} origin/${targetBranch}`,
+				`checkout existing ${targetBranch} branch`
 			);
 
-			// Ensure all tags are available
-			runOrDryRun(dryRun, `git fetch --tags --force`, 'fetch all tags');
-
-			// Merge base branch into release with custom commit message
 			runOrDryRun(
 				dryRun,
-				`git merge --no-edit --no-ff ${baseBranch} -m "chore(merge): pull ${baseBranch} into ${targetBranch}" --no-verify`,
-				`merge ${baseBranch} into ${targetBranch}`
+				`git pull origin ${targetBranch}`,
+				`pull latest changes from ${targetBranch}`
 			);
-
 			return;
 		}
 		echo(

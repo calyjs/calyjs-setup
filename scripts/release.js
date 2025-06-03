@@ -97,9 +97,9 @@ async function run() {
 					fallbackCurrentVersionResolver: 'disk',
 					specifierSource: 'conventional-commits',
 				},
-				stageChanges: true,
-				gitCommit: true,
-				gitCommitMessage: `chore(release): ${projectName} version bump`,
+				stageChanges: false,
+				gitCommit: false,
+				gitPush: false,
 				gitTag: false,
 			});
 
@@ -115,7 +115,7 @@ async function run() {
 				gitCommit: true,
 				gitTag: true,
 				gitPush: true,
-				gitCommitMessage: `chore(release): update ${projectName} changelog`,
+				gitCommitMessage: `chore(release): ${projectName} release changes`,
 			});
 
 			echo(
