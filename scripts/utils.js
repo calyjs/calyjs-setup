@@ -70,6 +70,8 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			// 	`merge ${baseBranch} into ${targetBranch} branch`
 			// );
 
+			runOrDryRun(dryRun, `git pull`, `pull changes from origin ${targetBranch}`);
+
 			runOrDryRun(
 				dryRun,
 				`git push --set-upstream origin ${targetBranch}`,
