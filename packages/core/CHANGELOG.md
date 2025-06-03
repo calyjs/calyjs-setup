@@ -1,3 +1,14 @@
+## 0.1.5 (2025-06-03)
+
+### 🚀 Features
+
+- **website:** update link text 19 ([fde74eb](https://github.com/calyjs/calyjs-setup/commit/fde74eb))
+- **core:** remove getString fn ([68977c0](https://github.com/calyjs/calyjs-setup/commit/68977c0))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.4 (2025-06-03)
 
 ### 🚀 Features
