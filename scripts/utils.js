@@ -63,11 +63,17 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 				`checkout existing ${targetBranch} branch`
 			);
 
-			// Merge base branch into release with custom commit message
+			// // Merge base branch into release with custom commit message
+			// runOrDryRun(
+			// 	dryRun,
+			// 	`git merge --no-edit --no-ff ${baseBranch} -m "chore(merge): pull ${baseBranch} into ${targetBranch} branch" --no-verify`,
+			// 	`merge ${baseBranch} into ${targetBranch} branch`
+			// );
+
 			runOrDryRun(
 				dryRun,
-				`git merge --no-edit --no-ff ${baseBranch} -m "chore(merge): pull ${baseBranch} into ${targetBranch} branch" --no-verify`,
-				`merge ${baseBranch} into ${targetBranch} branch`
+				`git push --set-upstream origin ${targetBranch}`,
+				`push ${targetBranch} to origin`
 			);
 
 			return;
