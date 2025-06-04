@@ -56,7 +56,12 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.greenBright(' found.\n')
 			);
 
-			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch} branch`);
+			runOrDryRun(
+				dryRun,
+				`git checkout -b ${targetBranch} origin/${baseBranch}`,
+				`checkout ${targetBranch} branch`
+			);
+
 			try {
 				runOrDryRun(
 					dryRun,
@@ -66,9 +71,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			} catch (err) {
 				echo(
 					banner('bgRed') +
-						chalk.red(
-							`✖ Merge conflict when merging remote '${targetBranch}' into local '${targetBranch}' → `
-						) +
+						chalk.red(`✖ Merge conflict when merging remote '${targetBranch}' with local → `) +
 						chalk.cyan.bold(` ${err.message} \n`)
 				);
 				process.exit(1);
