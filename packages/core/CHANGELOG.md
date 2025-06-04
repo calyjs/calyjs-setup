@@ -1,3 +1,13 @@
+## 0.1.7 (2025-06-04)
+
+### 🚀 Features
+
+- **core:** remove getString fn ([b38b099](https://github.com/calyjs/calyjs-setup/commit/b38b099))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.6 (2025-06-04)
 
 ### 🚀 Features
