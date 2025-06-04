@@ -69,7 +69,7 @@ async function run() {
 	branchSwitch(remoteBranchExists, targetBranch, baseBranch, dryRun);
 
 	for (const projectName of projects) {
-		const { tag, base, head, commits } = getLatestTagInfo(projectName);
+		const { tag, base, head, commits } = getLatestTagInfo(projectName, baseBranch);
 
 		if (!commits || !commits.trim()) {
 			echo(

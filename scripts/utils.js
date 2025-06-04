@@ -64,8 +64,8 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge --ff-only origin/${baseBranch}`,
-					`fast-forward merge '${baseBranch}' into '${targetBranch}'`
+					`git merge origin/${baseBranch} --no-commit --no-ff`,
+					`merge '${baseBranch}' into '${targetBranch}' without commiting`
 				);
 			} catch (err) {
 				echo(
@@ -77,9 +77,10 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			}
 			runOrDryRun(
 				dryRun,
-				'git push --follow-tags --no-verify',
-				`push updated '${targetBranch}' to origin`
+				`git commit -m "chore(merge): sync ${baseBranch} with ${targetBranch} branch" --no-verify`,
+				`commit ${targetBranch} changes`
 			);
+			runOrDryRun(dryRun, 'git push --no-verify', `push merge-commit to '${targetBranch}' branch`);
 			return;
 		}
 		echo(
@@ -109,7 +110,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 	}
 }
 
-function getLatestTagInfo(projectName) {
+function getLatestTagInfo(projectName, baseBranch) {
 	echo(
 		banner() +
 			chalk.cyanBright(` Retrieve latest tag avaiable for project `) +
@@ -120,7 +121,7 @@ function getLatestTagInfo(projectName) {
 	const baseCommit = !!latestTag
 		? getCommitFromTag(latestTag)
 		: execSync('git rev-list --max-parents=0 HEAD').toString().trim();
-	const headCommit = execSync('git rev-parse HEAD').toString().trim();
+	const headCommit = execSync(`git rev-list -n 1 ${baseBranch}`).toString().trim();
 
 	echo(
 		banner('bgGray') + chalk.white(' → Using base commit: ') + chalk.cyan.bold(` ${baseCommit}`)

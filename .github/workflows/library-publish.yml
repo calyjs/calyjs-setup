@@ -46,7 +46,10 @@ jobs:
           gpgKeyId: ${{ secrets.GPG_KEY_ID }}
 
       - name: Run publish script
-        run: pnpm run publish --tag=${{ github.ref_name }}
+        run: |
+          pnpm run publish \
+            --tag=${{ github.ref_name }} \
+            --base-branch ${{ vars.DEFAULT_BRANCH_NAME }}
         shell: bash
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
