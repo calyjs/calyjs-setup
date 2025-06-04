@@ -99,7 +99,9 @@ async function run() {
 				},
 				stageChanges: true,
 				gitCommit: true,
+				gitCommitArgs: '--no-verify',
 				gitCommitMessage: `chore(release): ${projectName} version bump`,
+				gitPush: false,
 				gitTag: false,
 			});
 
@@ -113,6 +115,7 @@ async function run() {
 				versionData: projectsVersionData,
 				stageChanges: true,
 				gitCommit: true,
+				gitCommitArgs: '--no-verify',
 				gitTag: true,
 				gitPush: true,
 				gitCommitMessage: `chore(release): update ${projectName} changelog`,
