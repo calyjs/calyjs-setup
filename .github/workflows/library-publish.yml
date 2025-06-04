@@ -48,7 +48,7 @@ jobs:
       - name: Run publish script
         run: |
           pnpm run publish \
-            --tag=${{ github.ref_name }} \
+            --tag ${{ github.ref_name }} \
             --base-branch ${{ vars.DEFAULT_BRANCH_NAME }}
         shell: bash
         env:
