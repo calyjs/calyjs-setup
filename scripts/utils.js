@@ -55,19 +55,34 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
+
 			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch} branch`);
 			try {
-				runOrDryRun(dryRun, `git rebase origin/${baseBranch}`, `rebase from ${baseBranch}`);
+				runOrDryRun(
+					dryRun,
+					`git merge origin/${targetBranch} --no-commit --no-ff`,
+					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
+				);
 			} catch (err) {
 				echo(
 					banner('bgRed') +
 						chalk.red(
-							`✖ Rebase conflict when rebasing remote '${targetBranch}' into '${targetBranch}' → `
+							`✖ Merge conflict when merging remote '${targetBranch}' into local '${targetBranch}' → `
 						) +
 						chalk.cyan.bold(` ${err.message} \n`)
 				);
 				process.exit(1);
 			}
+			runOrDryRun(
+				dryRun,
+				`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
+				`commit ${targetBranch} changes`
+			);
+			runOrDryRun(
+				dryRun,
+				`git push origin ${targetBranch} --follow-tags --no-verify`,
+				`push updated '${targetBranch}' to origin`
+			);
 			return;
 		}
 		echo(
