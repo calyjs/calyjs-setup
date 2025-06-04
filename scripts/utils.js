@@ -56,15 +56,8 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.greenBright(' found.\n')
 			);
 
-			runOrDryRun(dryRun, `git switch -c ${targetBranch}`, `switch to ${targetBranch} branch`);
+			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch} branch`);
 
-			runOrDryRun(
-				dryRun,
-				`git merge origin/${baseBranch} -m "chore(merge): pull master changes into release"`,
-				`merge ${baseBranch} into ${targetBranch}`
-			);
-
-			runOrDryRun(dryRun, `git push origin ${targetBranch}`, `push ${targetBranch} to origin`);
 			return;
 		}
 		echo(
@@ -81,7 +74,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 		);
 		runOrDryRun(
 			dryRun,
-			`git push --set-upstream origin ${targetBranch}`,
+			`git push --set-upstream origin ${targetBranch} --no-verify`,
 			`push ${targetBranch} to origin`
 		);
 	} catch (err) {
