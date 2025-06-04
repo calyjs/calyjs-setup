@@ -23,25 +23,9 @@ inputs:
     default: ''
     description: The body of the pull request
 
-  commit-message:
-    required: true
-    description: The commit message for the changes
-
 runs:
   using: "composite"
   steps:
-    - name: Commit changes
-      run: |
-        git add .
-        git commit -m "${{ inputs.commit-message }}" || echo "Nothing to commit"
-      shell: bash
-
-    - name: Create and push branch
-      run: |
-        git checkout -B ${{ inputs.branch }}
-        git push origin ${{ inputs.branch }} --force
-      shell: bash
-
     - name: Check if PR already exists
       id: pr-check
       run: |
