@@ -65,7 +65,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge origin/${targetBranch} --no-commit --no-ff`,
+					`git merge origin/${targetBranch} --no-commit --ff`,
 					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
 				);
 			} catch (err) {
@@ -76,16 +76,16 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 				);
 				process.exit(1);
 			}
-			runOrDryRun(
-				dryRun,
-				`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
-				`commit ${targetBranch} changes`
-			);
-			runOrDryRun(
-				dryRun,
-				`git push origin ${targetBranch} --follow-tags --no-verify`,
-				`push updated '${targetBranch}' to origin`
-			);
+			// runOrDryRun(
+			// 	dryRun,
+			// 	`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
+			// 	`commit ${targetBranch} changes`
+			// );
+			// runOrDryRun(
+			// 	dryRun,
+			// 	`git push origin ${targetBranch} --follow-tags --no-verify`,
+			// 	`push updated '${targetBranch}' to origin`
+			// );
 			return;
 		}
 		echo(
