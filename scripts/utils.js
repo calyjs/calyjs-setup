@@ -55,43 +55,19 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
-
-			runOrDryRun(
-				dryRun,
-				`git checkout -b ${targetBranch} origin/${baseBranch}`,
-				`create local ${targetBranch} branch from remote ${baseBranch}`
-			);
-			runOrDryRun(
-				dryRun,
-				`git fetch origin ${targetBranch}`,
-				`fetch latest changes from ${targetBranch}`
-			);
+			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch} branch`);
 			try {
-				runOrDryRun(
-					dryRun,
-					`git merge origin/${targetBranch} --no-commit --no-ff`,
-					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
-				);
+				runOrDryRun(dryRun, `git rebase origin/${baseBranch}`, `rebase from ${baseBranch}`);
 			} catch (err) {
 				echo(
 					banner('bgRed') +
 						chalk.red(
-							`✖ Merge conflict when merging remote '${targetBranch}' into local '${targetBranch}' → `
+							`✖ Rebase conflict when rebasing remote '${targetBranch}' into '${targetBranch}' → `
 						) +
 						chalk.cyan.bold(` ${err.message} \n`)
 				);
 				process.exit(1);
 			}
-			runOrDryRun(
-				dryRun,
-				`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
-				`commit ${targetBranch} changes`
-			);
-			runOrDryRun(
-				dryRun,
-				`git push origin ${targetBranch} --no-verify`,
-				`push updated '${targetBranch}' to origin`
-			);
 			return;
 		}
 		echo(
