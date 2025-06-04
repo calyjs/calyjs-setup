@@ -116,4 +116,3 @@ jobs:
           base: ${{ vars.DEFAULT_BRANCH_NAME }}
           title: 'chore(release): add release changes'
           body: 'This PR includes version bump and changelog updates.'
-          commit-message: 'chore(release): add release changes'
