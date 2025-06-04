@@ -55,7 +55,6 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
-			runOrDryRun(dryRun, 'git fetch --all --tags', 'fetch all remotes and tags');
 			runOrDryRun(
 				dryRun,
 				`git checkout ${targetBranch}`,
