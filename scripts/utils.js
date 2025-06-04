@@ -60,7 +60,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 
 			runOrDryRun(
 				dryRun,
-				`git merge origin ${baseBranch}`,
+				`git merge origin/${baseBranch} -m "chore(merge): pull master changes into release"`,
 				`merge ${baseBranch} into ${targetBranch}`
 			);
 
