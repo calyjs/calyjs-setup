@@ -57,11 +57,13 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 
 			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
+
 			runOrDryRun(
 				dryRun,
-				`git pull origin ${targetBranch}`,
-				`pull latest changes from ${targetBranch}`
+				`git merge --no-ff origin/${baseBranch} -m "🔀 Merge ${baseBranch} into ${targetBranch} before publish"`,
+				`merge latest changes from ${baseBranch} into ${targetBranch} with custom commit message`
 			);
+
 			return;
 		}
 		echo(
