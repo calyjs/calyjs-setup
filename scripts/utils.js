@@ -55,18 +55,18 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.magentaBright.bold(`'${targetBranch}'`) +
 					chalk.greenBright(' found.\n')
 			);
-
+			runOrDryRun(dryRun, 'git fetch --all --tags', 'fetch all remotes and tags');
 			runOrDryRun(
 				dryRun,
-				`git checkout -b ${targetBranch} origin/${baseBranch}`,
-				`checkout ${targetBranch} branch`
+				`git checkout ${targetBranch}`,
+				`checkout existing ${targetBranch} branch`
 			);
 
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge origin/${targetBranch} --no-commit --no-ff`,
-					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
+					`git merge origin/${baseBranch} --no-commit --no-ff`,
+					`merge '${baseBranch}' into '${targetBranch}' without commiting`
 				);
 			} catch (err) {
 				echo(
@@ -83,7 +83,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 			runOrDryRun(
 				dryRun,
-				`git push origin ${targetBranch} --follow-tags --no-verify`,
+				'git push --follow-tags --no-verify',
 				`push updated '${targetBranch}' to origin`
 			);
 			return;
