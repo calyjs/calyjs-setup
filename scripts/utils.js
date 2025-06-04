@@ -60,9 +60,11 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 
 			runOrDryRun(
 				dryRun,
-				`git push --set-upstream origin ${targetBranch}`,
+				`git pull --rebase origin ${targetBranch}`,
 				`push ${targetBranch} to origin`
 			);
+
+			runOrDryRun(dryRun, `git push origin ${targetBranch}`, `push ${targetBranch} to origin`);
 			return;
 		}
 		echo(
