@@ -65,7 +65,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge origin/${targetBranch} --no-commit --ff`,
+					`git merge origin/${targetBranch} --no-commit --no-ff`,
 					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
 				);
 			} catch (err) {
