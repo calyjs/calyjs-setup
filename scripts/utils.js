@@ -60,8 +60,8 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 
 			runOrDryRun(
 				dryRun,
-				`git pull --rebase origin ${targetBranch}`,
-				`push ${targetBranch} to origin`
+				`git merge origin/${baseBranch} -m "chore(merge): pull master changes into release"`,
+				`merge ${baseBranch} into ${targetBranch}`
 			);
 
 			runOrDryRun(dryRun, `git push origin ${targetBranch}`, `push ${targetBranch} to origin`);
