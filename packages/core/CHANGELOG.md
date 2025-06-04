@@ -1,3 +1,13 @@
+## 0.1.6 (2025-06-04)
+
+### 🚀 Features
+
+- **core:** add getString fn ([35b0af4](https://github.com/calyjs/calyjs-setup/commit/35b0af4))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.5 (2025-06-03)
 
 ### 🚀 Features
