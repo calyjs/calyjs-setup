@@ -65,27 +65,27 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			try {
 				runOrDryRun(
 					dryRun,
-					`git reset --hard origin/${baseBranch}`,
-					`reset '${targetBranch}' to match 'origin/${baseBranch}' (includes tag history)`
+					`git merge origin/${baseBranch} --no-commit --no-ff`,
+					`merge '${baseBranch}' into '${targetBranch}' without commiting`
 				);
 			} catch (err) {
 				echo(
 					banner('bgRed') +
-						`✖ Error resetting '${targetBranch}' to match 'origin/${baseBranch}' → ` +
+						chalk.red(`✖ Merge conflict when merging remote '${targetBranch}' with local → `) +
 						chalk.cyan.bold(` ${err.message} \n`)
 				);
 				process.exit(1);
 			}
-			// runOrDryRun(
-			// 	dryRun,
-			// 	`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
-			// 	`commit ${targetBranch} changes`
-			// );
-			// runOrDryRun(
-			// 	dryRun,
-			// 	`git push origin ${targetBranch} --follow-tags --no-verify`,
-			// 	`push updated '${targetBranch}' to origin`
-			// );
+			runOrDryRun(
+				dryRun,
+				`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
+				`commit ${targetBranch} changes`
+			);
+			runOrDryRun(
+				dryRun,
+				'git push --follow-tags --no-verify',
+				`push updated '${targetBranch}' to origin`
+			);
 			return;
 		}
 		echo(
