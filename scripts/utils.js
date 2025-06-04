@@ -56,8 +56,7 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 					chalk.greenBright(' found.\n')
 			);
 
-			runOrDryRun(dryRun, `git checkout ${targetBranch}`, `checkout ${targetBranch}`);
-
+			runOrDryRun(dryRun, `git switch -c ${targetBranch}`, `switch to ${targetBranch} branch`);
 			return;
 		}
 		echo(
