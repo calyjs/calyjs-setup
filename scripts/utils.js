@@ -58,21 +58,26 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 
 			runOrDryRun(
 				dryRun,
-				`git checkout -b ${targetBranch} origin/${targetBranch}`,
-				`checkout ${targetBranch} branch`
+				`git checkout -b ${targetBranch} origin/${baseBranch}`,
+				`create local ${targetBranch} branch from remote ${baseBranch}`
 			);
-			runOrDryRun(dryRun, `git reset --hard origin/${targetBranch}`, `reset to match origin`);
-			runOrDryRun(dryRun, `git fetch origin ${baseBranch}`, `fetch latest '${baseBranch}`);
+			runOrDryRun(
+				dryRun,
+				`git fetch origin ${targetBranch}`,
+				`fetch latest changes from ${targetBranch}`
+			);
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge origin/${baseBranch} --no-commit --no-ff`,
-					`merge '${baseBranch}' into '${targetBranch}' without commiting`
+					`git merge origin/${targetBranch} --no-commit --no-ff`,
+					`merge remote '${targetBranch}' into local '${targetBranch}' without commiting`
 				);
 			} catch (err) {
 				echo(
 					banner('bgRed') +
-						chalk.red(`✖ Merge conflict when merging '${baseBranch}' into '${targetBranch}' → `) +
+						chalk.red(
+							`✖ Merge conflict when merging remote '${targetBranch}' into local '${targetBranch}' → `
+						) +
 						chalk.cyan.bold(` ${err.message} \n`)
 				);
 				process.exit(1);
