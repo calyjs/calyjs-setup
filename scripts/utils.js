@@ -65,8 +65,8 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			try {
 				runOrDryRun(
 					dryRun,
-					`git merge origin/${baseBranch} --no-commit --no-ff`,
-					`merge '${baseBranch}' into '${targetBranch}' without commiting`
+					`git merge --ff-only origin/${baseBranch}`,
+					`fast-forward merge '${baseBranch}' into '${targetBranch}'`
 				);
 			} catch (err) {
 				echo(
@@ -76,11 +76,6 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 				);
 				process.exit(1);
 			}
-			runOrDryRun(
-				dryRun,
-				`git commit -m "chore(merge): sync ${baseBranch} into ${targetBranch}" --no-verify`,
-				`commit ${targetBranch} changes`
-			);
 			runOrDryRun(
 				dryRun,
 				'git push --follow-tags --no-verify',
