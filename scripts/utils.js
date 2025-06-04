@@ -57,6 +57,12 @@ function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
 			);
 
 			runOrDryRun(dryRun, `git switch -c ${targetBranch}`, `switch to ${targetBranch} branch`);
+
+			runOrDryRun(
+				dryRun,
+				`git push --set-upstream origin ${targetBranch}`,
+				`push ${targetBranch} to origin`
+			);
 			return;
 		}
 		echo(
