@@ -4,9 +4,10 @@ const { releaseVersion, releaseChangelog } = require('nx/release');
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
 const { banner, getLatestTagInfo } = require('./utils');
+const { execSync } = require('child_process');
 
 async function run() {
-	const { dryRun, verbose, specifier, projects } = await yargs
+	const { dryRun, verbose, specifier, projects, defaultBranch } = await yargs
 		.version(false)
 		.option('specifier', {
 			description:
@@ -28,6 +29,11 @@ async function run() {
 			description: 'List of project to be released',
 			type: 'array',
 			default: [],
+		})
+		.option('defaultBranch', {
+			description: 'Default repository branch',
+			type: 'string',
+			default: 'master',
 		})
 		.parseAsync();
 
@@ -60,12 +66,16 @@ async function run() {
 			continue;
 		}
 
+		const isFirstRelease = !!tag
+			? execSync(`git branch --contains ${tag}`).toString().includes(defaultBranch)
+			: false;
+
 		const commonProps = {
 			base,
 			head,
 			dryRun,
 			verbose,
-			firstRelease: !tag,
+			firstRelease: isFirstRelease,
 			projects: [projectName],
 		};
 

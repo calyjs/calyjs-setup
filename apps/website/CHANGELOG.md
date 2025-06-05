@@ -1,3 +1,14 @@
+## 4.0.27 (2025-06-05)
+
+### 🚀 Features
+
+- **website:** update link text 21 ([9a53ce9](https://github.com/calyjs/calyjs-setup/commit/9a53ce9))
+- **core:** remove getString function ([29088f6](https://github.com/calyjs/calyjs-setup/commit/29088f6))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 4.0.26 (2025-06-05)
 
 ### 🚀 Features

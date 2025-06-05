@@ -78,6 +78,8 @@ jobs:
     needs: analyze-affected-libraries
     if: needs.analyze-affected-libraries.outputs.should-release == 'true'
     runs-on: ubuntu-latest
+    outputs:
+      develop-exists: ${{ steps.check_develop_branch.outputs.exists }}
     permissions:
       contents: write
     steps:
@@ -101,7 +103,39 @@ jobs:
         run: |
           pnpm run release \
             --specifier ${{ inputs.version-bump }} \
-            --projects ${{ needs.analyze-affected-libraries.outputs.affected-libraries }}
+            --projects ${{ needs.analyze-affected-libraries.outputs.affected-libraries }} \
+            --default-branch ${{ github.event.repository.default_branch }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        
+      - name: Check if 'develop' branch exists
+        id: check_develop_branch
+        run: |
+          if git ls-remote --exit-code origin refs/heads/develop; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+        
+  create-sync-pr:
+    name: Create Sync PR (Default → Develop)
+    needs: create-release-tag
+    if: needs.create-release-tag.outputs.develop-exists == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
+      - name: Create Pull Request with Release Changes
+        uses: ./.github/actions/create-pr
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: ${{ github.event.repository.default_branch }}
+          base: develop
+          title: 'chore(release): add release changes'
+          body: 'This PR includes release changes from ${{ github.event.repository.default_branch }} branch.'
