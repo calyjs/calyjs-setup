@@ -6,7 +6,7 @@ Thank you for your interest in contributing to this project! To maintain consist
 
 ## Branching Strategy
 
-All new work must begin from a new branch created off the latest `develop` branch.
+All new work must begin from a new branch created off the latest `master` branch.
 
 ### Accepted Branch Name Formats:
 - `feat/<short-description>` — New feature implementation
@@ -68,17 +68,15 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0
    - All tests pass (run `npm test`, `yarn test`, or equivalent).
    - You have added/updated documentation as needed.
 4. **Commit your changes** with meaningful commit messages.
-5. **Push your branch** and open a **Pull Request (PR)** targeting the `develop` branch.
+5. **Push your branch** and open a **Pull Request (PR)** targeting the `master` branch.
 
 ---
 
 ## Pull Request Lifecycle
 
-- PR must target `develop` branch.
+- PR must target `master` branch.
 - All status checks (CI, tests, linters) must pass.
 - Reviews and approvals are required before merging.
-
-Once your changes are merged into `develop`, a new PR must be created for the `master` branch.
 
 ---
 
