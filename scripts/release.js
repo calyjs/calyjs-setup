@@ -4,6 +4,7 @@ const { releaseVersion, releaseChangelog } = require('nx/release');
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
 const { banner, getLatestTagInfo } = require('./utils');
+const { execSync } = require('child_process');
 
 async function run() {
 	const { dryRun, verbose, specifier, projects, defaultBranch } = await yargs
