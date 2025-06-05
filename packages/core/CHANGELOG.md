@@ -1,3 +1,13 @@
+## 0.1.10 (2025-06-05)
+
+### 🚀 Features
+
+- **core:** add getString function ([a619a50](https://github.com/calyjs/calyjs-setup/commit/a619a50))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.9 (2025-06-05)
 
 ### 🚀 Features
