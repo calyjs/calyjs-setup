@@ -6,7 +6,7 @@ const { chalk, echo } = require('zx');
 const { banner, getLatestTagInfo } = require('./utils');
 
 async function run() {
-	const { dryRun, verbose, specifier, projects } = await yargs
+	const { dryRun, verbose, specifier, projects, defaultBranch } = await yargs
 		.version(false)
 		.option('specifier', {
 			description:
@@ -29,6 +29,11 @@ async function run() {
 			type: 'array',
 			default: [],
 		})
+		.option('defaultBranch', {
+			description: 'Default repository branch',
+			type: 'string',
+			default: 'master',
+		})
 		.parseAsync();
 
 	if (projects.length === 0) {
@@ -50,7 +55,7 @@ async function run() {
 	);
 
 	for (const projectName of projects) {
-		const { base, head, commits } = getLatestTagInfo(projectName);
+		const { tag, base, head, commits } = getLatestTagInfo(projectName);
 
 		if (!commits || !commits.trim()) {
 			echo(
@@ -60,12 +65,16 @@ async function run() {
 			continue;
 		}
 
+		const isFirstRelease = !!tag
+			? execSync(`git branch --contains ${tag}`).toString().includes(defaultBranch)
+			: false;
+
 		const commonProps = {
 			base,
 			head,
 			dryRun,
 			verbose,
-			firstRelease: true,
+			firstRelease: isFirstRelease,
 			projects: [projectName],
 		};
 
