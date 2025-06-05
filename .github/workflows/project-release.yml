@@ -78,8 +78,6 @@ jobs:
     needs: analyze-affected-libraries
     if: needs.analyze-affected-libraries.outputs.should-release == 'true'
     runs-on: ubuntu-latest
-    outputs:
-      develop-exists: ${{ steps.check_branch.outputs.exists }}
     permissions:
       contents: write
     steps:
@@ -108,55 +106,4 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        
-      - name: Check if '${{ vars.DEV_BRANCH_NAME }}' branch exists
-        id: check_branch
-        run: |
-          if git ls-remote --exit-code origin refs/heads/${{ vars.DEV_BRANCH_NAME }}; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-        
-  create-sync-pr:
-    name: Create Sync PR
-    needs: create-release-tag
-    if: needs.create-release-tag.outputs.develop-exists == 'true'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Configure Git user and GPG signing
-        uses: ./.github/actions/git-config
-        with:
-          gpgPrivId: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpgKeyId: ${{ secrets.GPG_KEY_ID }}
-      
-      - name: Create sync branch
-        id: sync-check
-        run: |
-          if git rev-parse --verify origin/${{ vars.SYNC_BRANCH_NAME }} >/dev/null 2>&1; then
-            echo "::warning::Sync branch already exists. Skipping creation."
-            echo "sync-exists=false" >> "$GITHUB_OUTPUT"
-          else
-            git fetch origin
-            git checkout -b ${{ vars.SYNC_BRANCH_NAME }} origin/${{ vars.DEV_BRANCH_NAME }}
-            git merge origin/${{ github.event.repository.default_branch }} --no-ff --no-commit || true
-            git commit -m "chore(sync): merge ${{ github.event.repository.default_branch }} into ${{ vars.DEV_BRANCH_NAME }}" || echo "Nothing to commit"
-            git push origin ${{ vars.SYNC_BRANCH_NAME }}
-            echo "sync-exists=true" >> "$GITHUB_OUTPUT"
-          fi
-        
-      - name: Create Pull Request with Sync Changes
-        if: steps.sync-check.outputs.sync-exists == 'true'
-        uses: ./.github/actions/create-pr
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: ${{ vars.SYNC_BRANCH_NAME }}
-          base: ${{ vars.DEV_BRANCH_NAME }}
-          title: 'chore(sync): add sync changes'
+          
