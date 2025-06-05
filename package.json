@@ -14,7 +14,7 @@
     "release": "node ./scripts/release.js --verbose",
     "publish": "node ./scripts/publish.js --verbose",
     "publish:mock": "node ./scripts/publish.js --verbose --dryRun --tag=core@1.0.0",
-    "release:mock": "node ./scripts/release.js --verbose --dry-run --projects website",
+    "release:mock": "node ./scripts/release.js --verbose --dryRun --projects website --specifier major",
     "prepare": "husky"
   },
   "devDependencies": {

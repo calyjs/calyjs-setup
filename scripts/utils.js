@@ -5,15 +5,6 @@ const { execSync } = require('child_process');
 
 const banner = (color = 'bgCyan') => chalk[color].bold(' CALYJS ');
 
-function runOrDryRun(dryRun, command, description) {
-	if (dryRun) {
-		echo(banner('bgYellow') + chalk.yellow(` [dry-run] Would run: ${command}`));
-	} else {
-		echo(banner('bgGray') + chalk.white(` → Running: ${description}`));
-		execSync(command, { stdio: 'inherit' });
-	}
-}
-
 function getLatestProjectTag(projectName) {
 	try {
 		// Get the most recent Git tag for the specified project, sorted by creation date
@@ -37,80 +28,7 @@ function getCommitFromTag(tag) {
 	return execSync(`git rev-list -n 1 ${tag}`, { encoding: 'utf-8' }).trim();
 }
 
-function checkIfRemoteBranchExists(branchName) {
-	try {
-		const result = execSync(`git ls-remote --heads origin ${branchName}`, { encoding: 'utf8' });
-		return result.includes(`refs/heads/${branchName}`);
-	} catch {
-		return false;
-	}
-}
-
-function branchSwitch(branchExists, targetBranch, baseBranch, dryRun) {
-	try {
-		if (branchExists) {
-			echo(
-				banner('bgGreen') +
-					chalk.greenBright(' ✔ Remote branch ') +
-					chalk.magentaBright.bold(`'${targetBranch}'`) +
-					chalk.greenBright(' found.\n')
-			);
-			runOrDryRun(
-				dryRun,
-				`git checkout ${targetBranch}`,
-				`checkout existing ${targetBranch} branch`
-			);
-
-			try {
-				runOrDryRun(
-					dryRun,
-					`git merge origin/${baseBranch} --no-commit --no-ff`,
-					`merge '${baseBranch}' into '${targetBranch}' without commiting`
-				);
-			} catch (err) {
-				echo(
-					banner('bgRed') +
-						chalk.red(`✖ Merge conflict when merging remote '${targetBranch}' with local → `) +
-						chalk.cyan.bold(` ${err.message} \n`)
-				);
-				process.exit(1);
-			}
-			runOrDryRun(
-				dryRun,
-				`git commit -m "chore(merge): sync ${baseBranch} with ${targetBranch} branch" --no-verify`,
-				`commit ${targetBranch} changes`
-			);
-			runOrDryRun(dryRun, 'git push --no-verify', `push merge-commit to '${targetBranch}' branch`);
-			return;
-		}
-		echo(
-			banner('bgMagenta') +
-				chalk.magenta(' ⚠ Remote branch ') +
-				chalk.cyan.bold(`'${targetBranch}'`) +
-				chalk.magenta(' not found. Creating new one from ') +
-				chalk.cyan.bold(`'${baseBranch}'.\n`)
-		);
-		runOrDryRun(
-			dryRun,
-			`git checkout -b ${targetBranch} origin/${baseBranch}`,
-			`create and checkout ${targetBranch}`
-		);
-		runOrDryRun(
-			dryRun,
-			`git push --set-upstream origin ${targetBranch} --no-verify`,
-			`push ${targetBranch} to origin`
-		);
-	} catch (err) {
-		echo(
-			banner('bgRed') +
-				chalk.red(' ✖ Remote branch switch failed with following error →') +
-				chalk.cyan.bold(` ${err.message} \n`)
-		);
-		process.exit(1);
-	}
-}
-
-function getLatestTagInfo(projectName, baseBranch) {
+function getLatestTagInfo(projectName) {
 	echo(
 		banner() +
 			chalk.cyanBright(` Retrieve latest tag avaiable for project `) +
@@ -121,7 +39,7 @@ function getLatestTagInfo(projectName, baseBranch) {
 	const baseCommit = !!latestTag
 		? getCommitFromTag(latestTag)
 		: execSync('git rev-list --max-parents=0 HEAD').toString().trim();
-	const headCommit = execSync(`git rev-list -n 1 ${baseBranch}`).toString().trim();
+	const headCommit = execSync(`git rev-parse HEAD`).toString().trim();
 
 	echo(
 		banner('bgGray') + chalk.white(' → Using base commit: ') + chalk.cyan.bold(` ${baseCommit}`)
@@ -144,7 +62,5 @@ function getLatestTagInfo(projectName, baseBranch) {
 
 module.exports = {
 	getLatestTagInfo,
-	checkIfRemoteBranchExists,
 	banner,
-	branchSwitch,
 };

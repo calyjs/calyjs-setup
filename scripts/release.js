@@ -3,10 +3,10 @@
 const { releaseVersion, releaseChangelog } = require('nx/release');
 const yargs = require('yargs');
 const { chalk, echo } = require('zx');
-const { banner, branchSwitch, checkIfRemoteBranchExists, getLatestTagInfo } = require('./utils');
+const { banner, getLatestTagInfo } = require('./utils');
 
 async function run() {
-	const { dryRun, targetBranch, verbose, specifier, baseBranch, projects } = await yargs
+	const { dryRun, verbose, specifier, projects } = await yargs
 		.version(false)
 		.option('specifier', {
 			description:
@@ -18,16 +18,6 @@ async function run() {
 			description: 'Run without making changes',
 			type: 'boolean',
 			default: false,
-		})
-		.option('targetBranch', {
-			description: 'Branch to use for pushing changes',
-			type: 'string',
-			default: 'release',
-		})
-		.option('baseBranch', {
-			description: 'Base branch to use',
-			type: 'string',
-			default: 'master',
 		})
 		.option('verbose', {
 			description: 'Enable verbose output',
@@ -59,17 +49,8 @@ async function run() {
   `)
 	);
 
-	echo(
-		banner() +
-			chalk.cyanBright(` Validate if remote branch `) +
-			chalk.magenta.bold(`'${targetBranch}'`) +
-			chalk.cyanBright(` exists...\n`)
-	);
-	const remoteBranchExists = checkIfRemoteBranchExists(targetBranch);
-	branchSwitch(remoteBranchExists, targetBranch, baseBranch, dryRun);
-
 	for (const projectName of projects) {
-		const { tag, base, head, commits } = getLatestTagInfo(projectName, baseBranch);
+		const { tag, base, head, commits } = getLatestTagInfo(projectName);
 
 		if (!commits || !commits.trim()) {
 			echo(
@@ -98,18 +79,18 @@ async function run() {
 					specifierSource: 'conventional-commits',
 				},
 				stageChanges: true,
-				gitCommit: true,
-				gitCommitArgs: '--no-verify',
-				gitCommitMessage: `chore(release): ${projectName} version bump`,
+				gitCommit: false,
 				gitPush: false,
 				gitTag: false,
 			});
 
 			if (!projectsVersionData[projectName]) {
-				throw new Error(`Project "${projectName}" was not processed correctly by releaseVersion.`);
+				throw new Error(
+					`Project "${projectName}" was not processed correctly by Nx releaseVersion.`
+				);
 			}
 
-			await releaseChangelog({
+			const { projectChangelogs } = await releaseChangelog({
 				...commonProps,
 				version: workspaceVersion,
 				versionData: projectsVersionData,
@@ -118,20 +99,19 @@ async function run() {
 				gitCommitArgs: '--no-verify',
 				gitTag: true,
 				gitPush: true,
-				gitCommitMessage: `chore(release): update ${projectName} changelog`,
+				gitCommitMessage: `chore(release): ${projectName} release changes`,
 			});
 
-			echo(
-				banner('bgGreen') +
-					chalk.greenBright(' ✔ Changelog generated and pushed to ') +
-					chalk.magentaBright(`'${targetBranch}'`) +
-					chalk.greenBright(' branch.\n')
-			);
+			if (!projectChangelogs[projectName]) {
+				throw new Error(
+					`Project "${projectName}" was not processed correctly by Nx releaseChangelog.`
+				);
+			}
+
 			echo(banner('bgCyan') + chalk.cyanBright(' Documentation release completed successfully!'));
 			echo(
 				chalk.cyanBright(`
-				\r ${chalk.gray('Branch:')}        ${chalk.greenBright(targetBranch)}
-				\r ${chalk.gray('Version:')}       ${chalk.greenBright(projectsVersionData[projectName].newVersion)}
+				\r ${chalk.gray('Version:')}       ${chalk.greenBright(projectChangelogs[projectName].releaseVersion.rawVersion)}
 				\r ${chalk.gray('Project:')}       ${chalk.greenBright(projectName)}
 				\r ${chalk.gray('Dry Run:')}       ${chalk.greenBright(dryRun ? 'Yes' : 'No')}
 				\r ${chalk.gray('Verbose Mode:')}  ${chalk.greenBright(verbose ? 'Enabled' : 'Disabled')}

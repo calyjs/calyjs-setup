@@ -6,7 +6,7 @@ const { chalk, echo } = require('zx');
 const { banner, getLatestTagInfo } = require('./utils');
 
 async function run() {
-	const { dryRun, tag, verbose, baseBranch } = await yargs
+	const { dryRun, tag, verbose } = await yargs
 		.option('dryRun', {
 			description: 'Whether or not to perform a dry-run of the release process, defaults to true',
 			type: 'boolean',
@@ -16,11 +16,6 @@ async function run() {
 			description: 'This value matches the tag name shown on GitHub.',
 			type: 'string',
 			default: null,
-		})
-		.option('baseBranch', {
-			description: 'Base branch to use',
-			type: 'string',
-			default: 'master',
 		})
 		.option('verbose', {
 			description: 'Whether or not to enable verbose logging, defaults to false',
@@ -45,7 +40,7 @@ async function run() {
 	const match = tag?.match(/^(.*?)@.*$/i);
 	const projectName = match?.[1];
 
-	if (typeof tag !== 'string' || !projectName) {
+	if (!projectName) {
 		echo(
 			banner('bgRed') +
 				chalk.red(` ✖ Invalid tag name expression: ${tag} →`) +
@@ -54,7 +49,7 @@ async function run() {
 		process.exit(1);
 	}
 
-	const { tag: latestTag } = getLatestTagInfo(projectName, baseBranch);
+	const { tag: latestTag } = getLatestTagInfo(projectName);
 
 	try {
 		const publishStatus = await releasePublish({
@@ -65,15 +60,20 @@ async function run() {
 			tag: 'latest',
 		});
 
+		const code = publishStatus?.[projectName]?.code ?? 1;
+
+		if (code === 1) {
+			throw Error(`NPM publish script failed for '${projectName}'`);
+		}
+
 		echo(
 			banner('bgGreen') +
-				chalk.greenBright(' ✔ Nx successfully published ') +
+				chalk.greenBright(' ✔ Package ') +
 				chalk.magentaBright(`'${tag}'`) +
-				chalk.greenBright(' to NPM !!!\n')
+				chalk.greenBright(' successfully published to NPM !!!\n')
 		);
 
-		const code = publishStatus?.[projectName]?.code ?? 1;
-		process.exit(Number.isInteger(code) ? code : 1);
+		process.exit(code);
 	} catch (err) {
 		echo(
 			banner('bgRed') +

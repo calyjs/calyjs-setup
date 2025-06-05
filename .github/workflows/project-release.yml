@@ -48,7 +48,7 @@ jobs:
         id: branch-check
         uses: ./.github/actions/default-branch
         with:
-          default-branch: ${{ vars.DEFAULT_BRANCH_NAME }}
+          default-branch: ${{ github.event.repository.default_branch }}
 
   analyze-affected-libraries:
     name: Analyze Affected Libraries
@@ -101,18 +101,7 @@ jobs:
         run: |
           pnpm run release \
             --specifier ${{ inputs.version-bump }} \
-            --target-branch ${{ vars.RELEASE_BRANCH_NAME }} \
-            --base-branch ${{ vars.DEFAULT_BRANCH_NAME }} \
             --projects ${{ needs.analyze-affected-libraries.outputs.affected-libraries }}
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Create Pull Request with release version updates
-        uses: ./.github/actions/create-pr
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          branch: ${{ vars.RELEASE_BRANCH_NAME }}
-          base: ${{ vars.DEFAULT_BRANCH_NAME }}
-          title: 'chore(release): add release changes'
-          body: 'This PR includes version bump and changelog updates.'
