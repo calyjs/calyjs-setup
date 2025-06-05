@@ -50,7 +50,7 @@ async function run() {
 	);
 
 	for (const projectName of projects) {
-		const { tag, base, head, commits } = getLatestTagInfo(projectName);
+		const { base, head, commits } = getLatestTagInfo(projectName);
 
 		if (!commits || !commits.trim()) {
 			echo(
@@ -65,7 +65,7 @@ async function run() {
 			head,
 			dryRun,
 			verbose,
-			firstRelease: !tag,
+			firstRelease: true,
 			projects: [projectName],
 		};
 
