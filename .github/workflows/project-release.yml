@@ -153,7 +153,7 @@ jobs:
           fi
         
       - name: Create Pull Request with Sync Changes
-        if: steps.sync-check.outputs.sync-exists
+        if: steps.sync-check.outputs.sync-exists == 'true'
         uses: ./.github/actions/create-pr
         with:
           token: ${{ secrets.GH_TOKEN }}
