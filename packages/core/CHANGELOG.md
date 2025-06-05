@@ -1,3 +1,13 @@
+## 0.1.9 (2025-06-05)
+
+### 🚀 Features
+
+- **core:** remove getString function ([5f0c49a](https://github.com/calyjs/calyjs-setup/commit/5f0c49a))
+
+### ❤️ Thank You
+
+- rocmaz
+
 ## 0.1.8 (2025-06-05)
 
 ### 🚀 Features
