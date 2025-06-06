@@ -2,12 +2,10 @@ name: Lint, Test & Build Projects (CI)
 
 on:
   push:
-    branches: [master]
-  pull_request:
-    branches: [master, develop]
+    branches: ["**"]
 
 concurrency:
-  group: monorepo-ci-${{ github.workflow }}-${{ github.ref }}
+  group: monorepo-ci-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
